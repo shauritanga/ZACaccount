@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80114757459",
+    "project_id": "shaccount",
+    "storage_bucket": "shaccount.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80114757459:android:723a3938bef0141c0d7ba6",
+        "android_client_info": {
+          "package_name": "com.shauritanga.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfv-RYhMPpNfIdiuit-hwqQ4DjMDsBGUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.shauritanga.zaccount
+package com.shauritanga.app
 
 import io.flutter.embedding.android.FlutterActivity
 

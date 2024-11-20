@@ -146,8 +146,42 @@ class CompanyNotifier extends StateNotifier<Company> {
     );
   }
 
+  Future<void> updateCompanyDetails({
+    required String country,
+    required String zipcode,
+    required String email,
+    required String businessName,
+    required String legalName,
+    required String tin,
+    required String phone,
+    required String website,
+    required String city,
+    required String region,
+    required String street,
+    required String unit,
+  }) async {
+    state = state.copyWith(
+      country: country,
+      companyProfile: state.companyProfile?.copyWith(
+        name: legalName,
+        taxId: tin,
+        address: state.companyProfile?.address.copyWith(
+          city: city,
+          country: region,
+          zipCode: zipcode,
+          street: street,
+          unitNumber: unit,
+        ),
+      ),
+    );
+
+    await _firestore
+        .collection("companies")
+        .doc(state.id)
+        .update(state.toMap());
+  }
+
   Future<Company?> fetchData() async {
-    print("it is called");
     User? user = FirebaseAuth.instance.currentUser;
     late Company company;
     try {
@@ -158,10 +192,9 @@ class CompanyNotifier extends StateNotifier<Company> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        print(querySnapshot.docs[0].data());
         company = Company.fromMap(
             querySnapshot.docs[0].data() as Map<String, dynamic>);
-        print(company);
+
         state = company;
         return company;
       } else {
@@ -183,13 +216,32 @@ class CompanyNotifier extends StateNotifier<Company> {
               zipCode: "",
             ),
           ),
+          displayName: "",
         ); //
         return null;
       }
     } catch (e) {
-      print(e);
+      state = Company(
+        id: "",
+        created: DateTime.now(),
+        updated: DateTime.now(),
+        individual: Individual(id: user!.uid),
+        businessProfile: const BusinessProfile(),
+        companyProfile: const CompanyProfile(
+          name: "",
+          phone: "",
+          taxId: "",
+          address: Address(
+            street: "",
+            unitNumber: "",
+            city: "",
+            country: "",
+            zipCode: "",
+          ),
+        ),
+      );
       debugPrint('Error fetching company: $e');
+      return null;
     }
-    return company;
   }
 }

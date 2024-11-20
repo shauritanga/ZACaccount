@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -97,6 +98,30 @@ class Expense {
     );
   }
 
+  factory Expense.fromDocument(DocumentSnapshot json) {
+    return Expense(
+      id: json.id,
+      payee: json['payee'],
+      paymentAccount: json['paymentAccount'],
+      paymentDate: DateTime.parse(json['paymentDate']),
+      dueDate: DateTime.parse(json['dueDate']),
+      paymentMethod: json['paymentMethod'],
+      referenceNo: json['referenceNo'],
+      permitNo: json['permitNo'],
+      expenseStatus: json['expenseStatus'],
+      categoryItems: List<CategoryItem>.from(
+          json['categoryItems'].map((item) => CategoryItem.fromJson(item))),
+      productItems: List<ProductItem>.from(
+          json['productItems'].map((item) => ProductItem.fromJson(item))),
+      totalAmount: json['totalAmount'],
+      memo: json['memo'],
+      attachments: List<String>.from(json['attachments']),
+      currencyType: json['currencyType'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
+
   Expense copyWith({
     String? id,
     String? payee,
@@ -159,9 +184,9 @@ class Expense {
     };
   }
 
-  factory Expense.fromMap(Map<String, dynamic> map) {
+  factory Expense.fromMap(String id, Map<String, dynamic> map) {
     return Expense(
-      id: map['id'] as String,
+      id: id,
       payee: map['payee'] as String,
       paymentAccount: map['paymentAccount'] as String,
       paymentDate:

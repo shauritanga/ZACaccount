@@ -9,6 +9,7 @@ import 'package:zaccount/screens/add_expense_service.dart';
 import 'package:zaccount/screens/expense_accounts.dart';
 import 'package:zaccount/screens/expense_payment_details.dart';
 import 'package:zaccount/screens/payees.dart';
+import 'package:zaccount/screens/product_order_expense.dart';
 import 'package:zaccount/screens/products.dart';
 
 class AddExpenseScreen extends ConsumerStatefulWidget {
@@ -72,34 +73,36 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                 height: 0,
                 thickness: 0.3,
               ),
-              TextButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (ctx) => const PayeesScreen(),
+              payeeDetailsToucched
+                  ? Text(expense.payee)
+                  : TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (ctx) => const PayeesScreen(),
+                          ),
+                        );
+                        setState(() {
+                          payeeDetailsToucched = true;
+                        });
+                      },
+                      label: Text(
+                        "Add Payee",
+                        style: GoogleFonts.roboto(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      icon: Icon(
+                        CupertinoIcons.add_circled,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      style: const ButtonStyle(
+                        padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                      ),
                     ),
-                  );
-                  setState(() {
-                    payeeDetailsToucched = true;
-                  });
-                },
-                label: Text(
-                  "Add Payee",
-                  style: GoogleFonts.roboto(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                icon: Icon(
-                  CupertinoIcons.add_circled,
-                  color: Theme.of(context).primaryColor,
-                ),
-                style: const ButtonStyle(
-                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                ),
-              ),
               Divider(
                 indent: payeeDetailsToucched ? 0 : 44.w,
                 height: 0,
@@ -365,12 +368,21 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                     )
                   : Container(),
               TextButton.icon(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       fullscreenDialog: true,
                       builder: (ctx) => const ProductsScreen(),
+                    ),
+                  );
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      fullscreenDialog: true,
+                      builder: (ctx) =>
+                          ProductOrderExpenseDetails(productInfo: result),
                     ),
                   );
                   setState(() {
@@ -484,15 +496,28 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                 isSaving = true;
               });
               try {
-                await Future.delayed(
-                  const Duration(seconds: 2),
-                );
+                await ref.read(expenseProvider.notifier).addExpense();
 
                 setState(() {
                   isSaving = false;
                 });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.symmetric(horizontal: 16.w),
+                    content: const Text("expense created"),
+                  ),
+                );
+                Navigator.pop(context);
               } catch (e) {
-                debugPrint(e.toString());
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.symmetric(horizontal: 16.w),
+                    content: const Text("expense creation failed"),
+                  ),
+                );
+                Navigator.pop(context);
               }
             },
             style: ButtonStyle(

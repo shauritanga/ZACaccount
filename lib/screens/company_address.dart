@@ -11,7 +11,7 @@ import 'package:zaccount/screens/company_tin_number.dart';
 import 'package:zaccount/screens/districts.dart';
 import 'package:zaccount/screens/regions.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 

@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/company_website.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class CompanyLegalNameScreen extends ConsumerStatefulWidget {
   const CompanyLegalNameScreen({super.key});

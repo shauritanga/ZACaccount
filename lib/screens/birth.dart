@@ -7,7 +7,7 @@ import 'package:zaccount/models/date_of_birth.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/person_phone_number.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/widgets/dob_input.dart';
+import 'package:zaccount/shared/widgets/dob_input.dart';
 
 class BirthScreen extends ConsumerStatefulWidget {
   const BirthScreen({super.key});

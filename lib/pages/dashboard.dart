@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:zaccount/presentation/providers/company_provider.dart';
+import 'package:zaccount/presentation/providers/expense_provider.dart';
 import 'package:zaccount/presentation/providers/home_provider.dart';
+import 'package:zaccount/presentation/providers/invoice_provider.dart';
 import 'package:zaccount/presentation/providers/user_data_provider.dart';
 import 'package:zaccount/screens/add_customer.dart';
 import 'package:zaccount/screens/add_expense.dart';
@@ -11,8 +14,9 @@ import 'package:zaccount/screens/add_invoice.dart';
 import 'package:zaccount/screens/add_product.dart';
 import 'package:zaccount/screens/add_vendor.dart';
 import 'package:zaccount/screens/todo_list.dart';
-import 'package:zaccount/widgets/activity.dart';
-import 'package:zaccount/widgets/top_dashboard_menu.dart';
+import 'package:zaccount/shared/widgets/activity.dart';
+import 'package:zaccount/shared/widgets/page.dart';
+import 'package:zaccount/shared/widgets/top_dashboard_menu.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({super.key});
@@ -46,6 +50,12 @@ class _DashboardState extends ConsumerState<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
+    final company = ref.watch(companyProvider);
+
+    final invoices = ref.watch(invoicesFurureProvider);
+    final expenses = ref.watch(expenseFurureProvider);
+
+    
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
@@ -59,15 +69,15 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Upendo kwanza",
-                          style: TextStyle(
+                        Text(
+                          "${company.businessProfile?.name}",
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Color.fromARGB(207, 208, 208, 208),
                           ),
                         ),
                         Text(
-                          "Welcome, ${user.user?.firstName}",
+                          "Welcome, ${company.individual?.lastName}",
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -375,98 +385,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 const SizedBox(height: 16.0),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 24.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Total income this month"),
-                              Text("TSZ 5,900.00")
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.arrow_circle_down_outlined,
-                                color: Colors.red,
-                              ),
-                              SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("TSZ 7,080.00"),
-                                  Text("below last month")
-                                ],
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 42),
-                      Row(
-                        children: [
-                          Container(
-                            width: 16,
-                            height: 16,
-                            decoration: BoxDecoration(
-                                color: Colors.yellow,
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          const SizedBox(width: 6),
-                          const Text("0 invoice awaiting approval"),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Container(
-                            width: 16,
-                            height: 16,
-                            decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          const SizedBox(width: 6),
-                          const Text("0 invoice awaiting approval"),
-                        ],
-                      ),
-                      const SizedBox(height: 24.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 10,
-                            width: 35,
-                            decoration: BoxDecoration(
-                              color:
-                                  Theme.of(context).primaryColor.withAlpha(200),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Container(
-                            height: 10,
-                            width: 10,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                  height: 300,
+                  child: const IncomeDashboard(),
                 ),
                 const SizedBox(height: 24),
                 const Padding(

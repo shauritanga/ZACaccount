@@ -8,12 +8,14 @@ class CustomButton extends StatelessWidget {
     required double deviceWidth,
     required double deviceHeight,
     required this.title,
+    required this.onTap,
   })  : _deviceWidth = deviceWidth,
         _deviceHeight = deviceHeight;
 
   final double _deviceWidth;
   final double _deviceHeight;
   final String title;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class CustomButton extends StatelessWidget {
       height: _deviceHeight * 0.06,
       width: _deviceWidth,
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: onTap,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

@@ -4,7 +4,7 @@ import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zaccount/screens/add_staff_two.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class AddStaffFormScreen extends ConsumerStatefulWidget {
   const AddStaffFormScreen({super.key});

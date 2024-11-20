@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zaccount/utils/phone_number_formater.dart';
-import 'package:zaccount/widgets/vertical_divider.dart';
+import 'package:zaccount/shared/widgets/vertical_divider.dart';
 
 class StoreListTile extends ConsumerWidget {
   const StoreListTile({

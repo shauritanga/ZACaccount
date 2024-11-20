@@ -12,7 +12,7 @@ class Invoice {
   String customerLastName;
   String customerImageUrl;
   String orderId;
-  int totalAmount;
+  double totalAmount;
   double deposit;
   double balance;
   String invoiceTerms;
@@ -62,9 +62,9 @@ class Invoice {
         createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
-  factory Invoice.fromJson(Map<String, dynamic> json) {
+  factory Invoice.fromJson(String id, Map<String, dynamic> json) {
     return Invoice(
-      id: json['id'],
+      id: id,
       invoiceNo: json['invoiceNo'],
       invoiceStatus: json['invoiceStatus'],
       shopId: json['shopId'],
@@ -162,7 +162,7 @@ class Invoice {
     String? customerLastName,
     String? customerImageUrl,
     String? orderId,
-    int? totalAmount,
+    double? totalAmount,
     double? deposit,
     double? balance,
     String? invoiceTerms,

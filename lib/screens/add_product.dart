@@ -48,7 +48,7 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
             ),
           ),
         ),
-        leadingWidth: 100.w,
+        leadingWidth: 130.w,
         title: Text(
           "Add Product",
           style: GoogleFonts.roboto(

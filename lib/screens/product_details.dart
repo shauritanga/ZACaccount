@@ -42,7 +42,7 @@ class ProductDetails extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leadingWidth: 100.w,
+        leadingWidth: 120.w,
         actions: [
           IconButton(
             onPressed: () {},

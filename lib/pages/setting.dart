@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:zaccount/presentation/providers/user_data_provider.dart';
+import 'package:zaccount/models/company.dart';
+import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/about.dart';
 import 'package:zaccount/screens/access_management.dart';
 import 'package:zaccount/screens/company_details.dart';
@@ -16,20 +17,35 @@ import 'package:zaccount/screens/staff_management.dart';
 import 'package:zaccount/screens/store_management.dart';
 import 'package:zaccount/screens/subscription.dart';
 import 'package:zaccount/screens/support.dart';
-import 'package:zaccount/widgets/custom_button.dart';
-import 'package:zaccount/widgets/menu_list_item.dart';
+import 'package:zaccount/shared/services/auth_services.dart';
+import 'package:zaccount/shared/widgets/custom_button.dart';
+import 'package:zaccount/shared/widgets/menu_list_item.dart';
 
-class SettingsPage extends ConsumerWidget {
-  SettingsPage({super.key});
-
-  late double _deviceWidth, _deviceHeight;
+class SettingsPage extends ConsumerStatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends ConsumerState<SettingsPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  AuthService authService = AuthService();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
-    final user = ref.watch(userProvider);
-    _deviceHeight = MediaQuery.of(context).size.height;
-    _deviceWidth = MediaQuery.of(context).size.width;
+    final company = ref.watch(companyProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -51,7 +67,7 @@ class SettingsPage extends ConsumerWidget {
                 SizedBox(
                   height: 20.h,
                 ),
-                _userInfoWidget(context, currentUser, user),
+                _userInfoWidget(context, currentUser, company),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -59,7 +75,7 @@ class SettingsPage extends ConsumerWidget {
                 const SizedBox(
                   height: 36,
                 ),
-                _signOutWidget(),
+                _signOutWidget(context),
               ],
             ),
           ),
@@ -68,10 +84,9 @@ class SettingsPage extends ConsumerWidget {
     );
   }
 
-  Widget _userInfoWidget(context, User? currentUser, LocalUser user) {
+  Widget _userInfoWidget(context, User? currentUser, Company company) {
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: _deviceWidth * 0.03, vertical: _deviceWidth * 0.02),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
@@ -79,11 +94,11 @@ class SettingsPage extends ConsumerWidget {
       child: Row(
         children: [
           Container(
-            width: _deviceHeight * 0.05,
-            height: _deviceHeight * 0.05,
+            width: 56.h,
+            height: 56.h,
             decoration: BoxDecoration(
               color: Colors.grey,
-              borderRadius: BorderRadius.circular(_deviceHeight * 0.05),
+              borderRadius: BorderRadius.circular(50),
             ),
             child: const Center(
               child: Icon(
@@ -93,13 +108,13 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           SizedBox(
-            width: _deviceWidth * 0.04,
+            width: 8.h,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${user.user?.firstName} ${user.user?.lastName}",
+                "${company.individual?.firstName} ${company.individual?.lastName}",
                 style: GoogleFonts.roboto(fontSize: 18),
               ),
               Text(
@@ -115,7 +130,7 @@ class SettingsPage extends ConsumerWidget {
 
   Widget _menuList(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.02),
+      padding: EdgeInsets.symmetric(horizontal: 16.h),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
@@ -137,7 +152,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -156,7 +171,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -175,7 +190,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -194,7 +209,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -213,7 +228,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -232,7 +247,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -251,7 +266,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -270,7 +285,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -289,7 +304,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
@@ -308,23 +323,108 @@ class SettingsPage extends ConsumerWidget {
           ),
           Divider(
             height: 8,
-            indent: _deviceWidth * 0.08,
+            indent: 16.h,
             thickness: 0.5,
             endIndent: 0,
           ),
-          const MenuListItem(
+          MenuListItem(
             title: "Delte Account",
-            color: Color(0xffFE0000),
+            color: const Color(0xffFE0000),
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    content: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Are you sure you want to delete this account?",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          await showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(),
+                            builder: (context) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 24),
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      controller: _emailController,
+                                      decoration: const InputDecoration(
+                                        hintText: "Enter email",
+                                      ),
+                                    ),
+                                    TextField(
+                                      controller: _passwordController,
+                                      decoration: const InputDecoration(
+                                        hintText: "Enter password",
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (_emailController.text.isEmpty ||
+                                            _passwordController.text.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Fill all fileds"),
+                                            ),
+                                          );
+                                        }
+
+                                        await authService.deleteAccount(
+                                            _emailController.text,
+                                            _passwordController.text);
+                                      },
+                                      child: const Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: const Text("Ok"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _signOutWidget() {
+  Widget _signOutWidget(BuildContext context) {
     return CustomButton(
-      deviceWidth: _deviceWidth,
-      deviceHeight: _deviceHeight,
+      onTap: () => FirebaseAuth.instance.signOut(),
+      deviceWidth: MediaQuery.sizeOf(context).width,
+      deviceHeight: MediaQuery.sizeOf(context).height,
       title: "Sign Out",
     );
   }

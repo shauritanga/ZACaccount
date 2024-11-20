@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zaccount/presentation/providers/inccome_account_provider.dart';
 import 'package:zaccount/presentation/providers/product_provider.dart';
 import 'package:zaccount/screens/add_income_account.dart';
-import 'package:zaccount/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/custom_search_box.dart';
 
 class IncomeAccountsScreen extends ConsumerStatefulWidget {
   const IncomeAccountsScreen({super.key});

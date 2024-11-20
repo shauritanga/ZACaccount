@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:zaccount/models/branding.dart';
 import 'package:zaccount/models/business_profile.dart';
@@ -34,8 +35,8 @@ class Company extends Equatable {
   final String? timezone;
   final DateTime created;
   final DateTime updated;
-  const Company({
-    required this.id,
+  Company({
+    String? id,
     this.businessProfile,
     this.businessType,
     this.companyProfile,
@@ -56,7 +57,7 @@ class Company extends Equatable {
     this.timezone,
     required this.created,
     required this.updated,
-  });
+  }) : id = id ?? const Uuid().v4();
 
   Company copyWith({
     String? id,
@@ -212,7 +213,6 @@ class Company extends Equatable {
       id,
       country as String,
       email as String,
-      displayName as String,
     ];
   }
 }

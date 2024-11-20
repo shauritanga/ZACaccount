@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zaccount/presentation/providers/store_provider.dart';
 import 'package:zaccount/screens/add_store_address.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class AddStoreFormScreen extends ConsumerStatefulWidget {
   const AddStoreFormScreen({super.key});

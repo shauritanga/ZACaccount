@@ -6,7 +6,7 @@ import 'package:zaccount/models/business_type.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/business_name.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/widgets/custom_tile.dart';
+import 'package:zaccount/shared/widgets/custom_tile.dart';
 
 class BusinessTypeScreen extends ConsumerStatefulWidget {
   const BusinessTypeScreen({super.key});

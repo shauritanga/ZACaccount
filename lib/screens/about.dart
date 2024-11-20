@@ -38,7 +38,7 @@ class AboutScreen extends StatelessWidget {
               "assets/images/zaclogo.png",
               width: 150.w,
             ),
-            SizedBox(height: _deviceHeight * 0.06),
+            SizedBox(height: 18.h),
             Text(
               "ZACcount",
               style: GoogleFonts.roboto(
@@ -46,12 +46,12 @@ class AboutScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: _deviceHeight * 0.02),
+            SizedBox(height: 20.h),
             Text(
               "Version 1.0.0",
               style: GoogleFonts.roboto(fontSize: 18, color: Colors.grey),
             ),
-            SizedBox(height: _deviceHeight * 0.06),
+            SizedBox(height: 16.h),
             Text(
               "Thank you for choosing ZACcount! Streamline your financial tasks and make business management easier.",
               style: GoogleFonts.roboto(
@@ -60,9 +60,9 @@ class AboutScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: _deviceHeight * 0.02),
+            SizedBox(height: 16.h),
             const Divider(),
-            SizedBox(height: _deviceHeight * 0.02),
+            SizedBox(height: 16.h),
             Text(
               "Developed by: ZACcount Inc",
               style: GoogleFonts.roboto(
@@ -106,9 +106,9 @@ class AboutScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: _deviceHeight * 0.02),
+            SizedBox(height: 16.h),
             const Divider(),
-            SizedBox(height: _deviceHeight * 0.02),
+            SizedBox(height: 16.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -154,17 +154,9 @@ class AboutScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: _deviceHeight * 0.02),
+            SizedBox(height: 16.h),
             const Divider(),
-            SizedBox(height: _deviceHeight * 0.02),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _decorationContainer(),
-                _decorationContainer(),
-                _decorationContainer(),
-              ],
-            ),
+            SizedBox(height: 16.h),
             const Align(
               heightFactor: 4,
               alignment: Alignment.bottomCenter,

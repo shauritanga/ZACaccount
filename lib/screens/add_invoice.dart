@@ -10,9 +10,10 @@ import 'package:zaccount/presentation/providers/invoice_provider.dart';
 import 'package:zaccount/presentation/providers/order_provider.dart';
 import 'package:zaccount/screens/customers.dart';
 import 'package:zaccount/screens/invoice_customer_details.dart';
+import 'package:zaccount/screens/invoice_preview.dart';
 import 'package:zaccount/screens/order_invoice_additional_details.dart';
 import 'package:zaccount/screens/order_invoice_details.dart';
-import 'package:zaccount/screens/product_order.dart';
+import 'package:zaccount/screens/product_order_invoice.dart';
 import 'package:zaccount/screens/products.dart';
 
 class AddInvoiceScreen extends ConsumerStatefulWidget {
@@ -37,6 +38,7 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: GestureDetector(
           onTap: () {
+            ref.read(invoiceProvider.notifier).ref.invalidateSelf();
             Navigator.pop(context);
           },
           child: Container(
@@ -80,6 +82,7 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
                   ),
                 );
               }
+              ref.read(invoiceProvider.notifier).ref.invalidateSelf();
               Navigator.pop(context);
             },
             child: Container(
@@ -99,7 +102,7 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
             ),
           ),
         ],
-        leadingWidth: 100.w,
+        leadingWidth: 130.w,
       ),
       body: SafeArea(
         child: Padding(
@@ -175,6 +178,14 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
                             isCustomerTouched = true;
                             customer = result;
                           });
+
+                          ref
+                              .read(orderProvider.notifier)
+                              .updateOderCustomerDetails(
+                                idOfCustomer: customer.id,
+                                firstName: customer.firstName,
+                                lastName: customer.lastName,
+                              );
                         },
                         icon: Icon(
                           CupertinoIcons.add_circled_solid,
@@ -463,24 +474,17 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(10)),
+            color: Theme.of(context).primaryColor.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: TextButton(
             onPressed: () async {
-              setState(() {
-                isSaving = true;
-              });
-              try {
-                await Future.delayed(
-                  const Duration(seconds: 2),
-                );
-
-                setState(() {
-                  isSaving = false;
-                });
-              } catch (e) {
-                debugPrint(e.toString());
-              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const InvoicePreviewScreen(),
+                ),
+              );
             },
             style: ButtonStyle(
               backgroundColor:

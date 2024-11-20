@@ -1,15 +1,27 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:zaccount/widgets/custom_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:zaccount/presentation/providers/expense_provider.dart';
+import 'package:zaccount/presentation/providers/invoice_provider.dart';
+import 'package:zaccount/utils/charts/daily_chart.dart';
+import 'package:zaccount/utils/charts/monthly_chart.dart';
+import 'package:zaccount/utils/charts/weekly_chart.dart';
+import 'package:zaccount/utils/charts/yearly_chart.dart';
+import 'package:zaccount/utils/get_yearly_invoices.dart';
+import 'package:zaccount/utils/geting_today_invoices.dart';
+import 'package:zaccount/utils/getting_date_weekly.dart';
+import 'package:zaccount/utils/getting_invoices_weekly.dart';
+import 'package:zaccount/utils/getting_monthly_invoices.dart';
+import 'package:zaccount/shared/widgets/custom_tile.dart';
 
-class MyBusiness extends StatefulWidget {
+class MyBusiness extends ConsumerStatefulWidget {
   const MyBusiness({super.key});
 
   @override
-  State<MyBusiness> createState() => _MyBusinessState();
+  ConsumerState<MyBusiness> createState() => _MyBusinessState();
 }
 
-class _MyBusinessState extends State<MyBusiness> {
+class _MyBusinessState extends ConsumerState<MyBusiness> {
   late ScrollController _controller;
   bool _isModalOpen = false;
   String _dataFilter = "Daily";
@@ -38,6 +50,30 @@ class _MyBusinessState extends State<MyBusiness> {
 
   @override
   Widget build(BuildContext context) {
+    final invoices = ref.watch(invoicesFurureProvider);
+    final expenses = ref.watch(expenseFurureProvider);
+
+    double dayTotalInvoices = getInvoicesCreatedToday(invoices)
+        .map((invoice) => invoice['totalAmount'])
+        .fold(0.0, (acc, value) => acc + value);
+
+    double weekTotalInvoices = getInvoicesThisWeek(invoices)
+        .map((invoice) => invoice['totalAmount'])
+        .fold(0.0, (acc, value) => acc + value);
+
+    double monthTotalInvoices = getInvoicesThisMonth(invoices)
+        .map((invoice) => invoice['totalAmount'])
+        .fold(0.0, (acc, value) => acc + value);
+
+    double yearTotalInvoices = getInvoicesThisYear(invoices)
+        .map((invoice) => invoice['totalAmount'])
+        .fold(0.0, (acc, value) => acc + value);
+
+    double totalExpenses = invoices
+        .map((invoice) => invoice['totalAmount'])
+        .fold(0.0, (acc, value) => acc + value);
+    final week = getCurrentWeekRange();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -79,18 +115,153 @@ class _MyBusinessState extends State<MyBusiness> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 32),
-                                width:
-                                    MediaQuery.of(context).size.width * 0.73 -
-                                        19,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColorDark,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () async {
+                                  setState(() {
+                                    _isModalOpen = true;
+                                  });
+                                  await showModalBottomSheet(
+                                    showDragHandle: true,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.surface,
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(
+                                              0) // Removes the top rounded corners
+                                          ),
+                                    ),
+                                    builder: (context) {
+                                      return Container(
+                                        height: 250,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                        child: ListView(
+                                          shrinkWrap: true,
+                                          children: [
+                                            const Text(
+                                              "Select a time interval",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            CustomTile(
+                                              title: "Daily",
+                                              color: _dataFilter == "Daily"
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : null,
+                                              onTap: () {
+                                                setState(() {
+                                                  _dataFilter = "Daily";
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            const Divider(),
+                                            CustomTile(
+                                              title: "Weekly",
+                                              color: _dataFilter == "Weekly"
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : null,
+                                              onTap: () {
+                                                setState(() {
+                                                  _dataFilter = "Weekly";
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            const Divider(),
+                                            CustomTile(
+                                              title: "Monthly",
+                                              color: _dataFilter == "Monthly"
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : null,
+                                              onTap: () {
+                                                setState(() {
+                                                  _dataFilter = "Monthly";
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            const Divider(),
+                                            CustomTile(
+                                              title: "Quarterly",
+                                              color: _dataFilter == "Quarterly"
+                                                  ? const Color.fromARGB(
+                                                      255, 17, 21, 117)
+                                                  : null,
+                                              onTap: () {
+                                                setState(() {
+                                                  _dataFilter = "Quarterly";
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            const Divider(),
+                                            CustomTile(
+                                              title: "Yearly",
+                                              color: _dataFilter == "Yearly"
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : null,
+                                              onTap: () {
+                                                setState(() {
+                                                  _dataFilter = "Yearly";
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  setState(() {
+                                    _isModalOpen = false;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 32),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.73 -
+                                          19,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withBlue(90),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.calendar_month,
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        _dataFilter,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      const Spacer(),
+                                      const Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.white,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -102,16 +273,43 @@ class _MyBusinessState extends State<MyBusiness> {
                                         19,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColorDark,
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withBlue(90),
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
                                   ),
                                 ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.chevron_left,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.chevron_right,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        )),
+                        ),
+                      ),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
@@ -313,170 +511,15 @@ class _MyBusinessState extends State<MyBusiness> {
                                   ],
                                 ),
                                 const Text("Total Revenue"),
-                                const Text("TZS 0.00"),
-                                const Text("09/05/2024 - 09/10/2024"),
+                                Text(
+                                    "Tsh ${NumberFormat("#,##0.00").format(dayTotalInvoices)}"),
+                                Text(
+                                    "${week['firstDate']} - ${week['lastDate']}"),
                                 const SizedBox(height: 24),
                                 Flexible(
-                                  child: BarChart(
-                                    BarChartData(
-                                      barGroups: [
-                                        BarChartGroupData(
-                                          x: 5,
-                                          barRods: [
-                                            BarChartRodData(
-                                              toY: 400000,
-                                              color: Colors.blue,
-                                              width: 15,
-                                            ),
-                                            BarChartRodData(
-                                              toY: 500000,
-                                              color: Colors.blue.shade200,
-                                              width: 15,
-                                            ),
-                                          ],
-                                        ),
-                                        BarChartGroupData(
-                                          x: 6,
-                                          barRods: [
-                                            BarChartRodData(
-                                              toY: 200000,
-                                              color: Colors.blue,
-                                              width: 15,
-                                            ),
-                                            BarChartRodData(
-                                              toY: 600000,
-                                              color: Colors.blue.shade200,
-                                              width: 15,
-                                            ),
-                                          ],
-                                        ),
-                                        BarChartGroupData(
-                                          x: 7,
-                                          barRods: [
-                                            BarChartRodData(
-                                              toY: 8,
-                                              color: Colors.blue,
-                                              width: 15,
-                                            ),
-                                            BarChartRodData(
-                                              toY: 300000,
-                                              color: Colors.blue.shade200,
-                                              width: 15,
-                                            ),
-                                          ],
-                                        ),
-                                        BarChartGroupData(
-                                          x: 8,
-                                          barRods: [
-                                            BarChartRodData(
-                                              toY: 800000,
-                                              color: Colors.blue,
-                                              width: 15,
-                                            ),
-                                            BarChartRodData(
-                                              toY: 400000,
-                                              color: Colors.blue.shade200,
-                                              width: 15,
-                                            ),
-                                          ],
-                                        ),
-                                        BarChartGroupData(
-                                          x: 9,
-                                          barRods: [
-                                            BarChartRodData(
-                                              toY: 200000,
-                                              color: Colors.blue,
-                                              width: 15,
-                                            ),
-                                            BarChartRodData(
-                                              toY: 100000,
-                                              color: Colors.blue.shade200,
-                                              width: 15,
-                                            ),
-                                          ],
-                                        ),
-                                        BarChartGroupData(
-                                          x: 10,
-                                          barRods: [
-                                            BarChartRodData(
-                                              toY: 600000,
-                                              color: Colors.blue,
-                                              width: 15,
-                                            ),
-                                            BarChartRodData(
-                                              toY: 500000,
-                                              color: Colors.blue.shade200,
-                                              width: 15,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                      maxY: 1000000,
-                                      borderData: FlBorderData(
-                                        border: const Border(
-                                          top: BorderSide.none,
-                                          right: BorderSide.none,
-                                          left: BorderSide(width: 1),
-                                          bottom: BorderSide(width: 1),
-                                        ),
-                                      ),
-                                      titlesData: FlTitlesData(
-                                        rightTitles: const AxisTitles(
-                                          sideTitles:
-                                              SideTitles(showTitles: false),
-                                        ),
-                                        topTitles: const AxisTitles(
-                                          sideTitles:
-                                              SideTitles(showTitles: false),
-                                        ),
-                                        bottomTitles: AxisTitles(
-                                          sideTitles: SideTitles(
-                                            showTitles: true,
-                                            getTitlesWidget: (value, meta) {
-                                              switch (value.toInt()) {
-                                                case 5:
-                                                  return const Text(
-                                                    "Sep 05",
-                                                    style:
-                                                        TextStyle(fontSize: 10),
-                                                  );
-                                                case 6:
-                                                  return const Text(
-                                                    "Sep 06",
-                                                    style:
-                                                        TextStyle(fontSize: 10),
-                                                  );
-                                                case 7:
-                                                  return const Text(
-                                                    "Sep 07",
-                                                    style:
-                                                        TextStyle(fontSize: 10),
-                                                  );
-                                                case 8:
-                                                  return const Text(
-                                                    "Sep 08",
-                                                    style:
-                                                        TextStyle(fontSize: 10),
-                                                  );
-                                                case 9:
-                                                  return const Text(
-                                                    "Sep 09",
-                                                    style:
-                                                        TextStyle(fontSize: 10),
-                                                  );
-                                                case 10:
-                                                  return const Text(
-                                                    "Sep 10",
-                                                    style:
-                                                        TextStyle(fontSize: 10),
-                                                  );
-                                              }
-                                              return const Text("");
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  child: DailyRevenueExpenseChart(
+                                    invoices: invoices,
+                                    expenses: expenses,
                                   ),
                                 )
                               ],
@@ -694,176 +737,504 @@ class _MyBusinessState extends State<MyBusiness> {
                                       ],
                                     ),
                                     const Text("Total Revenue"),
-                                    const Text("TZS 0.00"),
+                                    Text(
+                                        "Tsh ${NumberFormat().format(weekTotalInvoices)}"),
                                     const Text("09/05/2024 - 09/10/2024"),
                                     const SizedBox(height: 24),
                                     Flexible(
-                                      child: BarChart(
-                                        BarChartData(
-                                          barGroups: [
-                                            BarChartGroupData(
-                                              x: 1,
-                                              barRods: [
-                                                BarChartRodData(
-                                                  toY: 400000,
-                                                  color: Colors.blue,
-                                                  width: 15,
-                                                ),
-                                                BarChartRodData(
-                                                  toY: 500000,
-                                                  color: Colors.blue.shade200,
-                                                  width: 15,
-                                                ),
-                                              ],
-                                            ),
-                                            BarChartGroupData(
-                                              x: 2,
-                                              barRods: [
-                                                BarChartRodData(
-                                                  toY: 200000,
-                                                  color: Colors.blue,
-                                                  width: 15,
-                                                ),
-                                                BarChartRodData(
-                                                  toY: 600000,
-                                                  color: Colors.blue.shade200,
-                                                  width: 15,
-                                                ),
-                                              ],
-                                            ),
-                                            BarChartGroupData(
-                                              x: 3,
-                                              barRods: [
-                                                BarChartRodData(
-                                                  toY: 8,
-                                                  color: Colors.blue,
-                                                  width: 15,
-                                                ),
-                                                BarChartRodData(
-                                                  toY: 300000,
-                                                  color: Colors.blue.shade200,
-                                                  width: 15,
-                                                ),
-                                              ],
-                                            ),
-                                            BarChartGroupData(
-                                              x: 4,
-                                              barRods: [
-                                                BarChartRodData(
-                                                  toY: 800000,
-                                                  color: Colors.blue,
-                                                  width: 15,
-                                                ),
-                                                BarChartRodData(
-                                                  toY: 400000,
-                                                  color: Colors.blue.shade200,
-                                                  width: 15,
-                                                ),
-                                              ],
-                                            ),
-                                            BarChartGroupData(
-                                              x: 5,
-                                              barRods: [
-                                                BarChartRodData(
-                                                  toY: 200000,
-                                                  color: Colors.blue,
-                                                  width: 15,
-                                                ),
-                                                BarChartRodData(
-                                                  toY: 100000,
-                                                  color: Colors.blue.shade200,
-                                                  width: 15,
-                                                ),
-                                              ],
-                                            ),
-                                            BarChartGroupData(
-                                              x: 6,
-                                              barRods: [
-                                                BarChartRodData(
-                                                  toY: 600000,
-                                                  color: Colors.blue,
-                                                  width: 15,
-                                                ),
-                                                BarChartRodData(
-                                                  toY: 500000,
-                                                  color: Colors.blue.shade200,
-                                                  width: 15,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                          maxY: 1000000,
-                                          borderData: FlBorderData(
-                                            border: const Border(
-                                              top: BorderSide.none,
-                                              right: BorderSide.none,
-                                              left: BorderSide(width: 1),
-                                              bottom: BorderSide(width: 1),
-                                            ),
-                                          ),
-                                          titlesData: FlTitlesData(
-                                            rightTitles: const AxisTitles(
-                                              sideTitles:
-                                                  SideTitles(showTitles: false),
-                                            ),
-                                            topTitles: const AxisTitles(
-                                              sideTitles:
-                                                  SideTitles(showTitles: false),
-                                            ),
-                                            bottomTitles: AxisTitles(
-                                              sideTitles: SideTitles(
-                                                showTitles: true,
-                                                getTitlesWidget: (value, meta) {
-                                                  switch (value.toInt()) {
-                                                    case 1:
-                                                      return const Text(
-                                                        "08/05",
-                                                        style: TextStyle(
-                                                            fontSize: 10),
-                                                      );
-                                                    case 2:
-                                                      return const Text(
-                                                        "08/11",
-                                                        style: TextStyle(
-                                                            fontSize: 10),
-                                                      );
-                                                    case 3:
-                                                      return const Text(
-                                                        "08/18",
-                                                        style: TextStyle(
-                                                            fontSize: 10),
-                                                      );
-                                                    case 4:
-                                                      return const Text(
-                                                        "08/25",
-                                                        style: TextStyle(
-                                                            fontSize: 10),
-                                                      );
-                                                    case 5:
-                                                      return const Text(
-                                                        "09/01",
-                                                        style: TextStyle(
-                                                            fontSize: 10),
-                                                      );
-                                                    case 6:
-                                                      return const Text(
-                                                        "09/08",
-                                                        style: TextStyle(
-                                                            fontSize: 10),
-                                                      );
-                                                  }
-                                                  return const Text("");
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                      child: WeeklyRevenueExpenseChart(
+                                        invoices: invoices,
+                                        expenses: expenses,
                                       ),
                                     )
                                   ],
                                 ),
                               )
-                            : Container(),
+                            : _dataFilter == "Monthly"
+                                ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 16),
+                                    height: 400,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Theme.of(context).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          offset: Offset(1, 1),
+                                          blurRadius: 1,
+                                          spreadRadius: 2.0,
+                                          color: Colors.grey,
+                                        )
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(_dataFilter),
+                                                IconButton(
+                                                  icon: Icon(_isModalOpen
+                                                      ? Icons.keyboard_arrow_up
+                                                      : Icons
+                                                          .keyboard_arrow_down),
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      _isModalOpen = true;
+                                                    });
+                                                    await showModalBottomSheet(
+                                                      showDragHandle: true,
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .surface,
+                                                      context: context,
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.vertical(
+                                                                top: Radius
+                                                                    .circular(
+                                                                        0) // Removes the top rounded corners
+                                                                ),
+                                                      ),
+                                                      builder: (context) {
+                                                        return Container(
+                                                          height: 250,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .surface,
+                                                          child: ListView(
+                                                            shrinkWrap: true,
+                                                            children: [
+                                                              const Text(
+                                                                "Select a time interval",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                              CustomTile(
+                                                                title: "Daily",
+                                                                color: _dataFilter ==
+                                                                        "Daily"
+                                                                    ? Theme.of(
+                                                                            context)
+                                                                        .primaryColor
+                                                                    : null,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    _dataFilter =
+                                                                        "Daily";
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                              const Divider(),
+                                                              CustomTile(
+                                                                title: "Weekly",
+                                                                color: _dataFilter ==
+                                                                        "Weekly"
+                                                                    ? Theme.of(
+                                                                            context)
+                                                                        .primaryColor
+                                                                    : null,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    _dataFilter =
+                                                                        "Weekly";
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                              const Divider(),
+                                                              CustomTile(
+                                                                title:
+                                                                    "Monthly",
+                                                                color: _dataFilter ==
+                                                                        "Monthly"
+                                                                    ? Theme.of(
+                                                                            context)
+                                                                        .primaryColor
+                                                                    : null,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    _dataFilter =
+                                                                        "Monthly";
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                              const Divider(),
+                                                              CustomTile(
+                                                                title:
+                                                                    "Quarterly",
+                                                                color: _dataFilter ==
+                                                                        "Quarterly"
+                                                                    ? const Color
+                                                                        .fromARGB(
+                                                                        255,
+                                                                        17,
+                                                                        21,
+                                                                        117)
+                                                                    : null,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    _dataFilter =
+                                                                        "Quarterly";
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                              const Divider(),
+                                                              CustomTile(
+                                                                title: "Yearly",
+                                                                color: _dataFilter ==
+                                                                        "Yearly"
+                                                                    ? Theme.of(
+                                                                            context)
+                                                                        .primaryColor
+                                                                    : null,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    _dataFilter =
+                                                                        "Yearly";
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              )
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                    setState(() {
+                                                      _isModalOpen = false;
+                                                    });
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 10,
+                                                      width: 10,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 4),
+                                                    const Text("Revenue")
+                                                  ],
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Row(children: [
+                                                  Container(
+                                                    height: 10,
+                                                    width: 10,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors
+                                                            .blue.shade200,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  const Text("Expenses")
+                                                ])
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        const Text("Total Revenue"),
+                                        Text(
+                                            "Tsh ${NumberFormat("#,##0.00").format(monthTotalInvoices)}"),
+                                        const Text("09/05/2024 - 09/10/2024"),
+                                        const SizedBox(height: 24),
+                                        Flexible(
+                                          child: MonthlyRevenueExpenseChart(
+                                            invoices: invoices,
+                                            expenses: expenses,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : _dataFilter == "Yearly"
+                                    ? Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 16),
+                                        height: 400,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              offset: Offset(1, 1),
+                                              blurRadius: 1,
+                                              spreadRadius: 2.0,
+                                              color: Colors.grey,
+                                            )
+                                          ],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(_dataFilter),
+                                                    IconButton(
+                                                      icon: Icon(_isModalOpen
+                                                          ? Icons
+                                                              .keyboard_arrow_up
+                                                          : Icons
+                                                              .keyboard_arrow_down),
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          _isModalOpen = true;
+                                                        });
+                                                        await showModalBottomSheet(
+                                                          showDragHandle: true,
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .surface,
+                                                          context: context,
+                                                          shape:
+                                                              const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.vertical(
+                                                                    top: Radius
+                                                                        .circular(
+                                                                            0) // Removes the top rounded corners
+                                                                    ),
+                                                          ),
+                                                          builder: (context) {
+                                                            return Container(
+                                                              height: 250,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .surface,
+                                                              child: ListView(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                children: [
+                                                                  const Text(
+                                                                    "Select a time interval",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                    ),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                  CustomTile(
+                                                                    title:
+                                                                        "Daily",
+                                                                    color: _dataFilter ==
+                                                                            "Daily"
+                                                                        ? Theme.of(context)
+                                                                            .primaryColor
+                                                                        : null,
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        _dataFilter =
+                                                                            "Daily";
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  const Divider(),
+                                                                  CustomTile(
+                                                                    title:
+                                                                        "Weekly",
+                                                                    color: _dataFilter ==
+                                                                            "Weekly"
+                                                                        ? Theme.of(context)
+                                                                            .primaryColor
+                                                                        : null,
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        _dataFilter =
+                                                                            "Weekly";
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  const Divider(),
+                                                                  CustomTile(
+                                                                    title:
+                                                                        "Monthly",
+                                                                    color: _dataFilter ==
+                                                                            "Monthly"
+                                                                        ? Theme.of(context)
+                                                                            .primaryColor
+                                                                        : null,
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        _dataFilter =
+                                                                            "Monthly";
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  const Divider(),
+                                                                  CustomTile(
+                                                                    title:
+                                                                        "Quarterly",
+                                                                    color: _dataFilter ==
+                                                                            "Quarterly"
+                                                                        ? const Color
+                                                                            .fromARGB(
+                                                                            255,
+                                                                            17,
+                                                                            21,
+                                                                            117)
+                                                                        : null,
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        _dataFilter =
+                                                                            "Quarterly";
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  const Divider(),
+                                                                  CustomTile(
+                                                                    title:
+                                                                        "Yearly",
+                                                                    color: _dataFilter ==
+                                                                            "Yearly"
+                                                                        ? Theme.of(context)
+                                                                            .primaryColor
+                                                                        : null,
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        _dataFilter =
+                                                                            "Yearly";
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                        );
+                                                        setState(() {
+                                                          _isModalOpen = false;
+                                                        });
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 10,
+                                                          width: 10,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.blue,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 4),
+                                                        const Text("Revenue")
+                                                      ],
+                                                    ),
+                                                    const SizedBox(width: 12),
+                                                    Row(children: [
+                                                      Container(
+                                                        height: 10,
+                                                        width: 10,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors
+                                                                .blue.shade200,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                      ),
+                                                      const SizedBox(width: 4),
+                                                      const Text("Expenses")
+                                                    ])
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            const Text("Total Revenue"),
+                                            Text(
+                                                "Tsh ${NumberFormat().format(yearTotalInvoices)}"),
+                                            const Text(
+                                                "09/05/2024 - 09/10/2024"),
+                                            const SizedBox(height: 24),
+                                            Flexible(
+                                              child: YearlyRevenueExpenseChart(
+                                                invoices: invoices,
+                                                expenses: expenses,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
                     const SizedBox(height: 24),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -964,24 +1335,24 @@ class _MyBusinessState extends State<MyBusiness> {
                               )
                             ],
                           ),
-                          const Expanded(
+                          Expanded(
                               child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
+                              const Text(
                                 "Total expense in",
                                 style: TextStyle(color: Colors.grey),
                               ),
-                              Text(
+                              const Text(
                                 "today",
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),
                               ),
                               Text(
-                                "TZS 0.0",
-                                style: TextStyle(
+                                "Tsh ${NumberFormat().format(totalExpenses)}",
+                                style: const TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                 ),

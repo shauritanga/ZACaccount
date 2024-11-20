@@ -6,7 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/congratulation.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class TinNumberScreen extends ConsumerStatefulWidget {
   const TinNumberScreen({super.key});

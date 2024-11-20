@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
-import 'package:zaccount/screens/done.dart';
+import 'package:zaccount/screens/home.dart';
 import 'package:zaccount/tria.dart';
 import 'package:zaccount/utils/constants.dart';
 
@@ -90,11 +90,12 @@ class _CongratulationScreenState extends ConsumerState<CongratulationScreen> {
               child: TextButton(
                 onPressed: () async {
                   await showLoadingDialog(context);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const FullScreenLoader(),
-                    ),
-                  );
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => const HomeScreen(),
+                      ),
+                      (route) => false);
                 },
                 style: ButtonStyle(
                   foregroundColor:

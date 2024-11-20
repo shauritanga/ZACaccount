@@ -1,210 +1,231 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:zaccount/models/customer.dart';
+import 'package:zaccount/models/vendor.dart';
+import 'package:zaccount/presentation/providers/customer_provider.dart';
 import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/utils/phone_number_formater.dart';
 
-class CustomerDetailsScreen extends StatefulWidget {
-  const CustomerDetailsScreen({this.customer, super.key});
+class CustomerDetailsScreen extends ConsumerStatefulWidget {
+  const CustomerDetailsScreen({required this.customerId, super.key});
 
-  final Customer? customer;
+  final String customerId;
 
   @override
-  State<CustomerDetailsScreen> createState() => _CustomerDetailsScreenState();
+  ConsumerState<CustomerDetailsScreen> createState() =>
+      _CustomerDetailsScreenState();
 }
 
-class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
+class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
   bool isSaving = false;
   int currentTabIndex = 0;
   @override
   Widget build(BuildContext context) {
-    final customer = widget.customer;
-    return Scaffold(
-      appBar: AppBar(
-        leading: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(
-            "Cancel",
-            style: GoogleFonts.roboto(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: primary,
-              decoration: TextDecoration.underline,
-              decorationStyle: TextDecorationStyle.solid,
-            ),
-          ),
-        ),
-        title: Text(
-          customer!.displayName,
-          style: GoogleFonts.roboto(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true,
-        leadingWidth: 100.w,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              CupertinoIcons.phone_fill,
-              color: primary,
-            ),
-          )
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      customer.displayName,
-                      style: GoogleFonts.roboto(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      customer.email,
-                      style: GoogleFonts.roboto(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Open Balance",
-                      style: GoogleFonts.roboto(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                        "TZS ${NumberFormat().format(customer.openingBalance)}"),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 16.h),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentTabIndex = 0;
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: primary.withOpacity(
-                          0.3,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Details",
-                            style: GoogleFonts.roboto(
-                              color: currentTabIndex == 0
-                                  ? Colors.black
-                                  : const Color.fromARGB(255, 92, 92, 92),
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Container(
-                            height: 5,
-                            width: double.infinity,
-                            color: currentTabIndex == 0
-                                ? primary
-                                : const Color.fromARGB(255, 135, 135, 135),
-                          )
-                        ],
-                      ),
-                    ),
+    final customerAsync = ref.watch(customerFutureProvider(widget.customerId));
+
+    return customerAsync.when(
+        data: (data) {
+          final customer = data;
+          return Scaffold(
+            appBar: AppBar(
+              leading: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Cancel",
+                  style: GoogleFonts.roboto(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: primary,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.solid,
                   ),
                 ),
-                SizedBox(width: 4.w),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentTabIndex = 1;
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: primary.withOpacity(
-                          0.3,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Transactions",
-                            style: GoogleFonts.roboto(
-                              color: currentTabIndex == 1
-                                  ? Colors.black
-                                  : const Color.fromARGB(255, 92, 92, 92),
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Container(
-                            height: 5,
-                            width: double.infinity,
-                            color: currentTabIndex == 1
-                                ? primary
-                                : const Color.fromARGB(255, 135, 135, 135),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 24.h),
-          Expanded(
-            child: [
-              Details(
-                customer: customer,
               ),
-              const Transactions()
-            ][currentTabIndex],
-          ),
-        ],
-      ),
-    );
+              title: Text(
+                customer.displayName,
+                style: GoogleFonts.roboto(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              centerTitle: true,
+              leadingWidth: 100.w,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    CupertinoIcons.phone_fill,
+                    color: primary,
+                  ),
+                )
+              ],
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            customer.displayName,
+                            style: GoogleFonts.roboto(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            customer.email,
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Open Balance",
+                            style: GoogleFonts.roboto(
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                              "TZS ${NumberFormat().format(customer.openingBalance)}"),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              currentTabIndex = 0;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 8.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: primary.withOpacity(
+                                0.3,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Details",
+                                  style: GoogleFonts.roboto(
+                                    color: currentTabIndex == 0
+                                        ? Colors.black
+                                        : const Color.fromARGB(255, 92, 92, 92),
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                Container(
+                                  height: 5,
+                                  width: double.infinity,
+                                  color: currentTabIndex == 0
+                                      ? primary
+                                      : const Color.fromARGB(
+                                          255, 135, 135, 135),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              currentTabIndex = 1;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 8.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: primary.withOpacity(
+                                0.3,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Transactions",
+                                  style: GoogleFonts.roboto(
+                                    color: currentTabIndex == 1
+                                        ? Colors.black
+                                        : const Color.fromARGB(255, 92, 92, 92),
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                Container(
+                                  height: 5,
+                                  width: double.infinity,
+                                  color: currentTabIndex == 1
+                                      ? primary
+                                      : const Color.fromARGB(
+                                          255, 135, 135, 135),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                Expanded(
+                  child: [
+                    Details(
+                      customer: customer,
+                    ),
+                    const Transactions()
+                  ][currentTabIndex],
+                ),
+              ],
+            ),
+          );
+        },
+        error: (error, stackTrace) => Scaffold(
+              body: Center(
+                child: Text(error.toString()),
+              ),
+            ),
+        loading: () => const Scaffold(
+              body: Center(
+                child: CupertinoActivityIndicator(),
+              ),
+            ));
   }
 }
 

@@ -3,13 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zaccount/models/address.dart';
 import 'package:zaccount/models/customer.dart';
 
-final customerFutureProvider = FutureProvider<List<Customer>>((ref) async {
+final customersFutureProvider = FutureProvider<List<Customer>>((ref) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   QuerySnapshot snapshot = await firestore.collection("customers").get();
   final customers = snapshot.docs
       .map((doc) => Customer.fromJson(doc.data() as Map<String, dynamic>))
       .toList();
   return customers;
+});
+
+final customerFutureProvider =
+    FutureProvider.family<Customer, String>((ref, userId) async {
+  DocumentSnapshot snapshot = await FirebaseFirestore.instance
+      .collection("customers")
+      .doc(userId)
+      .get();
+  Customer customer =
+      Customer.fromJson(snapshot.data() as Map<String, dynamic>);
+  return customer;
 });
 
 final customerStreamProvider = StreamProvider<List<Customer>>((ref) {

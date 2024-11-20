@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:zaccount/presentation/providers/customer_provider.dart';
+import 'package:zaccount/presentation/providers/expense_provider.dart';
 import 'package:zaccount/screens/add_vendor.dart';
-import 'package:zaccount/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/customer_tile.dart';
 
 class PayeesScreen extends ConsumerStatefulWidget {
   const PayeesScreen({super.key});
@@ -21,7 +22,7 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final asyncValue = ref.watch(customerFutureProvider);
+    final asyncValue = ref.watch(customersFutureProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -239,50 +240,17 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                   shrinkWrap: true,
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    final category = data[index];
-                    return Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            CupertinoIcons.person,
-                            color: Colors.purple,
-                          ),
-                          title: Text(
-                            category.firstName,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          subtitle: Row(
-                            children: [
-                              Text(
-                                DateFormat.yMMMd().format(category.updatedAt),
-                              ),
-                              SizedBox(width: 8.w),
-                              Container(
-                                width: 1,
-                                height: 18,
-                                decoration:
-                                    const BoxDecoration(color: Colors.white),
-                              ),
-                              SizedBox(width: 8.w),
-                              const Text(
-                                "Customer",
-                                style: TextStyle(
-                                  color: Colors.purple,
-                                ),
-                              )
-                            ],
-                          ),
-                          trailing: Text(
-                            "TZS ${NumberFormat().format(category.openingBalance)}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const Divider()
-                      ],
+                    final customer = data[index];
+                    return CustomerListTile(
+                      customerName: customer.displayName,
+                      email: customer.email,
+                      phone: customer.phone,
+                      onTap: () {
+                        ref
+                            .read(expenseProvider.notifier)
+                            .updatePayee(customer.displayName);
+                        Navigator.pop(context);
+                      },
                     );
                   },
                 ),

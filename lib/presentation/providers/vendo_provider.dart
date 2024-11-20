@@ -1,9 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zaccount/data/repositories/vendor_repository.dart';
 import 'package:zaccount/models/address.dart';
 import 'package:zaccount/models/vendor.dart';
 import 'package:zaccount/presentation/providers/staff_provider.dart';
+
+final vendorsFutureProvider = FutureProvider<List<Vendor>>((ref) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  QuerySnapshot snapshot = await firestore.collection("vendors").get();
+  final vendors = snapshot.docs
+      .map((doc) => Vendor.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+      .toList();
+  return vendors;
+});
+
+final vendorStreamProvider = StreamProvider<List<Vendor>>((ref) {
+  return FirebaseFirestore.instance.collection('vendors').snapshots().map(
+        (snapshot) =>
+            snapshot.docs.map((doc) => Vendor.fromDocument(doc)).toList(),
+      );
+});
 
 final vendorProviderNotifier =
     StateNotifierProvider<VendorNotifier, Vendor>((ref) {
@@ -88,10 +104,16 @@ class VendorNotifier extends StateNotifier<Vendor> {
       email: email,
       phone: phone,
     );
+
+    state = state.copyWith(
+        firstName: firstName, lastName: lastName, email: email, phone: phone);
   }
 
-  Future<int> saveVendor(Vendor vendor) async {
-    VendorRepositoryImpl vendorRepositoryImpl = VendorRepositoryImpl();
-    return await vendorRepositoryImpl.addVendor(vendor);
+  Future<String> saveVendor(Vendor vendor) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference reference =
+        await firestore.collection("vendors").add(state.toJson());
+
+    return reference.id;
   }
 }

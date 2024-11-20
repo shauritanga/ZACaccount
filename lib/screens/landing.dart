@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zaccount/screens/first.dart';
 import 'package:zaccount/screens/login.dart';
@@ -79,26 +80,28 @@ class _LandingScreenState extends State<LandingScreen>
                           _updateCurrentPageIndex(0);
                         },
                         child: Container(
-                          height: 32,
-                          width: 32,
+                          height: 32.h,
+                          width: 32.w,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: lightGrey,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5.r),
                           ),
-                          child: Icon(Icons.chevron_left,
-                              color: Colors.blue.shade900),
+                          child: Icon(
+                            Icons.chevron_left,
+                            color: Colors.blue.shade900,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                SizedBox(height: 24.h),
                 Text(
                   "Simplify",
                   style: TextStyle(
                     color: primary,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -106,13 +109,13 @@ class _LandingScreenState extends State<LandingScreen>
                   "Your finances",
                   style: TextStyle(
                     color: primary,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(height: 24.h),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Text(
                     "Discover how ZACcount can help you simplify tasks and stay organized",
                     style: GoogleFonts.roboto(
@@ -120,30 +123,30 @@ class _LandingScreenState extends State<LandingScreen>
                     ),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: 24.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 10,
-                      height: 10,
+                      width: 10.w,
+                      height: 10.w,
                       decoration: BoxDecoration(
                         color: Colors.grey,
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(50.r),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
                     Container(
-                      width: 10,
-                      height: 10,
+                      width: 10.w,
+                      height: 10.w,
                       decoration: BoxDecoration(
                         color: Colors.yellow,
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(50.r),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: 24.h),
                 Align(
                   alignment: Alignment.center,
                   child: TextButton(
@@ -157,7 +160,7 @@ class _LandingScreenState extends State<LandingScreen>
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll<Color>(primary),
                       minimumSize:
-                          const WidgetStatePropertyAll<Size>(Size(200, 44)),
+                          WidgetStatePropertyAll<Size>(Size(200.w, 50.h)),
                     ),
                     child: const Text(
                       "next",

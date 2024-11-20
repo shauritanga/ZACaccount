@@ -12,7 +12,7 @@ class InvoiceDataSource {
   Future<List<Invoice>> getInvoices() async {
     List<Map<String, dynamic>> maps = await databaseHelper.fetchAll("invoices");
     List<Invoice> invoices = List.generate(maps.length, (index) {
-      return Invoice.fromJson(maps[index]);
+      return Invoice.fromJson("78", maps[index]);
     });
     return invoices;
   }

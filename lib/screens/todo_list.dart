@@ -64,7 +64,7 @@ class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            SizedBox(height: 32.h),
+            SizedBox(height: 24.h),
             CircularPercentIndicator(
               radius: 35.r,
               percent: 0.67,
@@ -74,7 +74,7 @@ class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
               center: const Text("67%"),
               progressColor: Theme.of(context).primaryColor,
             ),
-            SizedBox(height: 34.h),
+            SizedBox(height: 24.h),
             Text(
               "Let's get Started.",
               style: TextStyle(

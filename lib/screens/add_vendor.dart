@@ -61,7 +61,7 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
           ),
         ),
         centerTitle: true,
-        leadingWidth: 100.w,
+        leadingWidth: 120.w,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -510,7 +510,7 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
               final res = await ref
                   .read(vendorProviderNotifier.notifier)
                   .saveVendor(vendor);
-              if (res > 0) {
+              if (res.isNotEmpty) {
                 await ref.read(staffProvider.notifier).saveStaff(staff);
               }
               await Future.delayed(

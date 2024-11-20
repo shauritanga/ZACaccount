@@ -6,9 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/welcome_two.dart';
-import 'package:zaccount/tria.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class CompanyTinNumberScreen extends ConsumerStatefulWidget {
   const CompanyTinNumberScreen({super.key});

@@ -7,7 +7,7 @@ import 'package:zaccount/models/product_item.dart';
 import 'package:zaccount/presentation/providers/expense_provider.dart';
 import 'package:zaccount/presentation/providers/product_provider.dart';
 import 'package:zaccount/screens/add_product.dart';
-import 'package:zaccount/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/custom_search_box.dart';
 
 class ProductsScreen extends ConsumerStatefulWidget {
   const ProductsScreen({super.key});

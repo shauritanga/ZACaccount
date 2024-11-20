@@ -10,6 +10,7 @@ class CustomListItem extends StatelessWidget {
     required this.status,
     required this.icon,
     required this.amount,
+    required this.dateCreated,
     this.onTap,
   });
   final Color color;
@@ -18,11 +19,13 @@ class CustomListItem extends StatelessWidget {
   final String status;
   final IconData icon;
   final double amount;
+  final DateTime dateCreated;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,9 +43,10 @@ class CustomListItem extends StatelessWidget {
                   Text(title),
                   Row(
                     children: [
-                      const Text(
-                        "Aug 4, 2024",
-                        style: TextStyle(color: Colors.grey, fontSize: 13.0),
+                      Text(
+                        DateFormat.yMMMd().format(dateCreated),
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 13.0),
                       ),
                       const SizedBox(width: 8),
                       Container(

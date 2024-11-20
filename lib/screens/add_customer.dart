@@ -64,7 +64,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
           ),
         ),
         centerTitle: true,
-        leadingWidth: 100.w,
+        leadingWidth: 130.w,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

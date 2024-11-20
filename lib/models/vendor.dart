@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:zaccount/models/address.dart';
@@ -90,9 +91,38 @@ class Vendor {
   }
 
   // JSON deserialization
-  factory Vendor.fromJson(Map<String, dynamic> json) {
+  factory Vendor.fromJson(Map<String, dynamic> json, String id) {
     return Vendor(
-      id: json['id'],
+      id: id,
+      companyName: json['companyName'],
+      vendorDisplayName: json['vendorDisplayName'],
+      title: json['title'],
+      firstName: json['firstName'],
+      middleName: json['middleName'],
+      lastName: json['lastName'],
+      displayName: json['displayName'],
+      suffix: json['suffix'],
+      email: json['email'],
+      phone: json['phone'],
+      mobileNumber: json['mobileNumber'],
+      faxNumber: json['faxNumber'],
+      address: Address.fromMap(json['address']),
+      nameOnChecks: json['nameOnChecks'],
+      accountName: json['accountName'],
+      accountNo: json['accountNo'],
+      routingNo: json['routingNo'],
+      businessIdNo: json['businessIdNo'],
+      website: json['website'],
+      openingBalance: json['openingBalance'],
+      notes: json['notes'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
+
+  factory Vendor.fromDocument(DocumentSnapshot json) {
+    return Vendor(
+      id: json.id,
       companyName: json['companyName'],
       vendorDisplayName: json['vendorDisplayName'],
       title: json['title'],

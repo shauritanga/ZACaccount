@@ -7,7 +7,7 @@ import 'package:zaccount/presentation/providers/store_provider.dart';
 import 'package:zaccount/screens/districts.dart';
 import 'package:zaccount/screens/regions.dart';
 import 'package:zaccount/screens/store_success.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class AddStoreAddressForm extends ConsumerStatefulWidget {
   const AddStoreAddressForm({super.key});

@@ -84,7 +84,7 @@ class SupportScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 20.h),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     width: MediaQuery.sizeOf(context).width,
@@ -117,12 +117,12 @@ class SupportScreen extends StatelessWidget {
                             Stack(
                               children: [
                                 Container(
-                                  width: 10.w,
+                                  width: 87.w,
                                   color: Colors.yellow,
                                 ),
                                 Container(
-                                  width: 13.w,
-                                  height: 13.w,
+                                  width: 29,
+                                  height: 29,
                                   decoration: BoxDecoration(
                                     image: const DecorationImage(
                                       image: NetworkImage(
@@ -135,7 +135,7 @@ class SupportScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Positioned(
-                                  left: 16.w,
+                                  left: 20,
                                   child: Container(
                                     width: 29,
                                     height: 29,
@@ -153,7 +153,7 @@ class SupportScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Positioned(
-                                  left: 20,
+                                  left: 40,
                                   child: Container(
                                     width: 29,
                                     height: 29,
@@ -173,17 +173,20 @@ class SupportScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(width: 10.w),
+                            // SizedBox(width: 10.w),
                             Column(
                               children: [
                                 Text(
                                   "We typically reply in",
                                   style: GoogleFonts.roboto(color: Colors.grey),
                                 ),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 8.h),
                                 Row(
                                   children: [
-                                    const Icon(HugeIcons.strokeRoundedTime04),
+                                    const Icon(
+                                      HugeIcons.strokeRoundedTime04,
+                                      size: 16,
+                                    ),
                                     SizedBox(width: 10.w),
                                     Text(
                                       "less than 2 hours",
@@ -201,8 +204,6 @@ class SupportScreen extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 10.w, vertical: 5.h),
-                          width: 200,
-                          height: 19,
                           decoration: BoxDecoration(
                             color: primary.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),

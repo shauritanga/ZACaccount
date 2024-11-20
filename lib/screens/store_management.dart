@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zaccount/presentation/providers/store_provider.dart';
 import 'package:zaccount/screens/add_store.dart';
-import 'package:zaccount/widgets/custom_search_box.dart';
-import 'package:zaccount/widgets/store_tile.dart';
+import 'package:zaccount/shared/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/store_tile.dart';
 
 class StoreManagementScreen extends ConsumerStatefulWidget {
   const StoreManagementScreen({this.isClickabe = false, super.key});

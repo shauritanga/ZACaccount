@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:zaccount/widgets/custom_tile.dart';
+import 'package:zaccount/shared/widgets/custom_tile.dart';
 
 class MyBusiness extends StatefulWidget {
   const MyBusiness({super.key});

@@ -4,11 +4,39 @@ import 'package:zaccount/models/order.dart';
 import 'package:zaccount/models/product_item.dart';
 
 final orderStreamProvider = StreamProvider<List<Orders>>((ref) {
-  return FirebaseFirestore.instance.collection('invoices').snapshots().map(
+  return FirebaseFirestore.instance.collection('orders').snapshots().map(
         (snapshot) =>
             snapshot.docs.map((doc) => Orders.fromDocument(doc)).toList(),
       );
 });
+
+class OrderListNotifier extends StateNotifier<List<Map<String, dynamic>>> {
+  OrderListNotifier() : super([]) {
+    // Automatically fetch products when the notifier is created
+    _fetchInvoices();
+  }
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  void _fetchInvoices() async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('orders')
+          .orderBy('createdAt', descending: false)
+          .get();
+      List<Map<String, dynamic>> orders = querySnapshot.docs.map((doc) {
+        return doc.data();
+      }).toList();
+      state = orders;
+    } catch (e) {
+      // Handle errors as needed
+      print('Error fetching products: $e');
+    }
+  }
+}
+
+final orderFurureProvider =
+    StateNotifierProvider<OrderListNotifier, List<Map<String, dynamic>>>(
+  (ref) => OrderListNotifier(),
+);
 
 final orderProvider = StateNotifierProvider<OrdersNotifier, Orders>((ref) {
   return OrdersNotifier();
@@ -45,6 +73,7 @@ class OrdersNotifier extends StateNotifier<Orders> {
   Future<DocumentReference> addOrder() async {
     DocumentReference reference =
         await _firesore.collection("orders").add(state.toJson());
+    state = Orders();
     return reference;
   }
 }

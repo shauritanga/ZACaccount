@@ -1,18 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:zaccount/presentation/providers/invoice_provider.dart';
 import 'package:zaccount/screens/invoice_details_edit.dart';
 
-class InvoiceDetails extends StatefulWidget {
-  const InvoiceDetails({super.key});
+class InvoiceDetails extends ConsumerStatefulWidget {
+  const InvoiceDetails({
+    required this.invoiceId,
+    super.key,
+  });
+  final String invoiceId;
 
   @override
-  State<InvoiceDetails> createState() => _InvoiceDetailsState();
+  ConsumerState<InvoiceDetails> createState() => _InvoiceDetailsState();
 }
 
-class _InvoiceDetailsState extends State<InvoiceDetails>
+class _InvoiceDetailsState extends ConsumerState<InvoiceDetails>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
 
@@ -26,6 +32,23 @@ class _InvoiceDetailsState extends State<InvoiceDetails>
 
   @override
   Widget build(BuildContext context) {
+    final invoiceAsync = ref.watch(invoiceFutureProvider(widget.invoiceId));
+
+    invoiceAsync.when(
+      data: (data) {},
+      error: (error, stackTrace) => Scaffold(
+        body: Center(
+          child: Text(
+            error.toString(),
+          ),
+        ),
+      ),
+      loading: () => const Scaffold(
+        body: Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,

@@ -6,19 +6,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:zaccount/models/product_info.dart';
 import 'package:zaccount/models/product_item.dart';
-import 'package:zaccount/presentation/providers/order_provider.dart';
+import 'package:zaccount/presentation/providers/expense_provider.dart';
 import 'package:zaccount/utils/constants.dart';
 
-class ProductOrderDetails extends ConsumerStatefulWidget {
-  const ProductOrderDetails({super.key, required this.productInfo});
+class ProductOrderExpenseDetails extends ConsumerStatefulWidget {
+  const ProductOrderExpenseDetails({super.key, required this.productInfo});
   final ProductInfo productInfo;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ProductOrderDetailsState();
+      _ProductOrderExpenseDetailsState();
 }
 
-class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
+class _ProductOrderExpenseDetailsState
+    extends ConsumerState<ProductOrderExpenseDetails> {
   String dateSelected = DateFormat.yMMMMd('en_US').format(DateTime.now());
   DateTime submittedDate = DateTime.now();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -232,13 +233,14 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                 isSaving = true;
               });
               try {
-                ref.read(orderProvider.notifier).updateproductItem(
+                ref.read(expenseProvider.notifier).updateproductItem(
                       ProductItem(
                         item: product.name,
                         quantity: quantity,
                         amount: quantity * product.salesPrice,
                         processingDate: submittedDate,
                         rate: product.salesPrice.toInt(),
+                        sku: sku,
                       ),
                     );
 

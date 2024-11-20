@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zaccount/screens/home.dart';
+import 'package:zaccount/screens/auth.dart';
 import 'package:zaccount/screens/landing.dart';
 import 'package:zaccount/utils/theme/theme_constants.dart';
 import 'firebase_options.dart';
@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
           home: child,
         );
       },
-      child: const HomeScreen(),
+      child: isFirstTime ? const LandingScreen() : const AuthStateTracker(),
     );
   }
 }

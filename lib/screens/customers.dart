@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zaccount/presentation/providers/customer_provider.dart';
 import 'package:zaccount/screens/add_customer.dart';
-import 'package:zaccount/widgets/custom_search_box.dart';
-import 'package:zaccount/widgets/customer_tile.dart';
+import 'package:zaccount/shared/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/customer_tile.dart';
 
 class CustomersScreen extends ConsumerStatefulWidget {
   const CustomersScreen({super.key});

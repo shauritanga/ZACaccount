@@ -5,7 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/phone_number.dart';
 
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class CompanyWebsiteScreen extends ConsumerStatefulWidget {
   const CompanyWebsiteScreen({super.key});

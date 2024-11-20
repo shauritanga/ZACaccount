@@ -517,6 +517,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
+  google_identity_services_web:
+    dependency: transitive
+    description:
+      name: google_identity_services_web
+      sha256: bf215f340648e78697fdac486d75fca67f85944502e579bdcecd029babc6f4d8
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2"
+  google_sign_in:
+    dependency: "direct main"
+    description:
+      name: google_sign_in
+      sha256: fad6ddc80c427b0bba705f2116204ce1173e09cf299f85e053d57a55e5b2dd56
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.2"
+  google_sign_in_android:
+    dependency: transitive
+    description:
+      name: google_sign_in_android
+      sha256: "0928059d2f0840f63c7b07a30cf73b593ae872cdd0dbd46d1b9ba878d2599c01"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.33"
+  google_sign_in_ios:
+    dependency: transitive
+    description:
+      name: google_sign_in_ios
+      sha256: "83f015169102df1ab2905cf8abd8934e28f87db9ace7a5fa676998842fed228a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.7.8"
+  google_sign_in_platform_interface:
+    dependency: transitive
+    description:
+      name: google_sign_in_platform_interface
+      sha256: "1f6e5787d7a120cc0359ddf315c92309069171306242e181c09472d1b00a2971"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.5"
+  google_sign_in_web:
+    dependency: transitive
+    description:
+      name: google_sign_in_web
+      sha256: ada595df6c30cead48e66b1f3a050edf0c5cf2ba60c185d69690e08adcc6281b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.4+3"
   http:
     dependency: "direct main"
     description:
@@ -661,6 +709,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  mailer:
+    dependency: "direct main"
+    description:
+      name: mailer
+      sha256: "21fde1497c79f402cb5fa7c50abd58927d360139e492546c941ee10767684fac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.0"
   matcher:
     dependency: transitive
     description:
@@ -781,6 +837,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.11.1"
+  pdf_widget_wrapper:
+    dependency: transitive
+    description:
+      name: pdf_widget_wrapper
+      sha256: c930860d987213a3d58c7ec3b7ecf8085c3897f773e8dc23da9cae60a5d6d0f5
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   percent_indicator:
     dependency: "direct main"
     description:
@@ -813,6 +877,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  printing:
+    dependency: "direct main"
+    description:
+      name: printing
+      sha256: b535d177fc6e8f8908e19b0ff5c1d4a87e3c4d0bf675e05aa2562af1b7853906
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.13.4"
   qr:
     dependency: transitive
     description:
@@ -837,6 +909,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  screenshot:
+    dependency: "direct main"
+    description:
+      name: screenshot
+      sha256: "63817697a7835e6ce82add4228e15d233b74d42975c143ad8cfe07009fab866b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   share_plus:
     dependency: "direct main"
     description:

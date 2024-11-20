@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/home.dart';
+import 'package:zaccount/screens/welcome.dart';
 import 'package:zaccount/tria.dart';
 
-class FullScreenLoader extends StatefulWidget {
+import '../models/company.dart';
+
+class FullScreenLoader extends ConsumerStatefulWidget {
   const FullScreenLoader({super.key});
 
   @override
-  _FullScreenLoaderState createState() => _FullScreenLoaderState();
+  ConsumerState createState() => _FullScreenLoaderState();
 }
 
-class _FullScreenLoaderState extends State<FullScreenLoader> {
+class _FullScreenLoaderState extends ConsumerState<FullScreenLoader> {
   @override
   void initState() {
     super.initState();
-    // Start the saving operation when the screen is displayed
+
     saveData();
   }
 
   // Simulate data saving
   Future<void> saveData() async {
-    await Future.delayed(const Duration(seconds: 3)); // Simulate a delay
+    Company? company = await ref.watch(companyProvider.notifier).fetchData();
 
     // After saving is complete, navigate back to the previous screen
+    if (company == null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WelcomeScreen(),
+        ),
+      );
+      return;
+    }
+
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (ctx) => const HomeScreen()),

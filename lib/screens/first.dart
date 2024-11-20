@@ -22,7 +22,7 @@ class FirstLandingScreen extends StatelessWidget {
           child: Text(
             "Effortless Financial Management",
             style: GoogleFonts.roboto(
-              fontSize: 40,
+              fontSize: 40.sp,
               color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.bold,
             ),

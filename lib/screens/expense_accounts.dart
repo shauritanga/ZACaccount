@@ -7,7 +7,7 @@ import 'package:zaccount/presentation/providers/expense_account.dart';
 import 'package:zaccount/presentation/providers/expense_provider.dart';
 import 'package:zaccount/screens/add_expense_account.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/widgets/custom_search_box.dart';
+import 'package:zaccount/shared/widgets/custom_search_box.dart';
 
 class ExpenseAccountsScreen extends ConsumerStatefulWidget {
   const ExpenseAccountsScreen({super.key});

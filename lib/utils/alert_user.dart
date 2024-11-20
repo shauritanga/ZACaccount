@@ -20,10 +20,10 @@ Future<dynamic> alertUserVerification(BuildContext context) {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text(
+                    child: Text(
                       "Cancel",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ))
@@ -33,19 +33,19 @@ Future<dynamic> alertUserVerification(BuildContext context) {
               "assets/images/email.gif",
               height: 150.h,
             ),
-            SizedBox(height: 44.h),
-            const Text(
+            SizedBox(height: 32.h),
+            Text(
               "Verification",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
               ),
             ),
             SizedBox(height: 6.h),
-            const Text(
+            Text(
               "We have sent verification email to your email address. Please veriy to continue",
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
               textAlign: TextAlign.center,
             ),

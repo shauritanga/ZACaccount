@@ -6,9 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
-import 'package:zaccount/presentation/providers/user_data_provider.dart';
 import 'package:zaccount/screens/birth.dart';
-import 'package:zaccount/widgets/input_form_field.dart';
+import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class PersonalNameScreen extends ConsumerStatefulWidget {
   const PersonalNameScreen({super.key});

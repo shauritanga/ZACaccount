@@ -16,6 +16,7 @@ import 'package:zaccount/screens/terms.dart';
 import 'package:zaccount/screens/welcome.dart';
 import 'package:zaccount/utils/alert_user.dart';
 import 'package:zaccount/utils/constants.dart';
+import 'package:zaccount/utils/gamil_sign_in.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -65,12 +66,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               SizedBox(height: 34.h),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Text(
                   "Let's",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -81,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   "Get started",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -118,6 +119,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         onSaved: (value) => email = value!,
                         keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Email is required";
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16.h),
                       TextFormField(
@@ -139,19 +146,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         obscureText: true,
                         onSaved: (value) => password = value!,
                         keyboardType: TextInputType.visiblePassword,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Password is required";
+                          }
+
+                          return null;
+                        },
                       )
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 16.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don't have an account?",
                     style: TextStyle(
                       color: Colors.grey,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -163,16 +177,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       );
                     },
-                    label: const Text("Create Account"),
+                    label: Text(
+                      "Create Account",
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
                     icon: Icon(
                       CupertinoIcons.arrow_right_circle_fill,
                       color: Theme.of(context).primaryColor,
+                      size: 18.sp,
                     ),
                     iconAlignment: IconAlignment.end,
                   )
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 18.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: InkWell(
@@ -202,24 +220,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         }
                         AuthDataResultModel(uid: user.uid, email: user.email);
                         Company? company = await ref
-                            .read(companyProvider.notifier)
+                            .watch(companyProvider.notifier)
                             .fetchData();
 
-                        if (company != null) {
-                          if (!context.mounted) return;
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => const HomeScreen(),
-                              ),
-                              (ctx) => false);
+                        // After saving is complete, navigate back to the previous screen
+                        print(company);
+                        if (company == null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WelcomeScreen(),
+                            ),
+                          );
+                          return;
                         }
-                        if (!context.mounted) return;
+
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (ctx) => const WelcomeScreen(),
-                            ),
+                                builder: (ctx) => const HomeScreen()),
                             (ctx) => false);
                       } on FirebaseAuthException catch (e) {
                         setState(() {
@@ -228,10 +247,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         debugPrint(e.toString());
                       }
                     }
+                    setState(() {
+                      isSaving = false;
+                    });
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: primary,
@@ -245,7 +269,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         : Text(
                             'Sign In',
                             style: GoogleFonts.roboto(
-                              fontSize: 20,
+                              fontSize: 18.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                             ),
@@ -257,7 +281,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    UserCredential userCredential = await signInWithGoogle();
+                    final res =
+                        await ref.read(companyProvider.notifier).fetchData();
+                    if (res == null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => const WelcomeScreen(),
+                        ),
+                      );
+                      return;
+                    }
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => const HomeScreen(),
+                        ),
+                        (route) => false);
+                  },
                   child: Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
@@ -278,7 +321,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Text(
                           'Continue with Google',
                           style: GoogleFonts.roboto(
-                            fontSize: 20,
+                            fontSize: 18.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
                           ),
@@ -288,7 +331,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -320,11 +362,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         },
                       );
                     },
-                    child: const Text("Privacy Policy"),
+                    child: Text(
+                      "Privacy Policy",
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
                   ),
-                  const Text(
+                  Text(
                     "&",
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 12.sp),
                   ),
                   TextButton(
                     onPressed: () {
@@ -351,7 +396,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         },
                       );
                     },
-                    child: const Text("Terms of Use"),
+                    child: Text(
+                      "Terms of Use",
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
                   ),
                 ],
               ),

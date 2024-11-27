@@ -52,7 +52,7 @@ class _InvoicePreviewScreenState extends ConsumerState<InvoicePreviewScreen> {
           IconButton(
             onPressed: () async {
               File pdf = await createPdf();
-              await sendEmailWithPdf(pdf);
+              await sendEmail(pdf);
             },
             icon: const Icon(CupertinoIcons.envelope),
           ),

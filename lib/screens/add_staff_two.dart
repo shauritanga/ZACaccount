@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zaccount/models/store.dart';
+import 'package:zaccount/presentation/providers/role_provider.dart';
+import 'package:zaccount/presentation/providers/staff_provider.dart';
 import 'package:zaccount/screens/store_management.dart';
 import 'package:zaccount/shared/widgets/input_form_field.dart';
 
@@ -15,19 +18,19 @@ class AddStaffFormScreenTwo extends ConsumerStatefulWidget {
 
 class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
   GlobalKey formKey = GlobalKey();
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController departmentController = TextEditingController();
+  final TextEditingController roleController = TextEditingController();
   final TextEditingController storeController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController accessController = TextEditingController();
   bool isButtonEnabled = false;
   bool isModalOpen = false;
+  Map<String, dynamic> store = {};
 
   void _checkIfAllFieldsFilled() {
-    bool allFieldsFilled = firstNameController.text.isNotEmpty &&
-        lastNameController.text.isNotEmpty &&
+    bool allFieldsFilled = departmentController.text.isNotEmpty &&
+        roleController.text.isNotEmpty &&
         storeController.text.isNotEmpty &&
-        phoneController.text.isNotEmpty &&
-        phoneController.text.length == 12;
+        accessController.text.isNotEmpty;
 
     if (allFieldsFilled != isButtonEnabled) {
       setState(() {
@@ -52,7 +55,7 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
               children: [
                 SizedBox(height: 24.h),
                 InputFormField(
-                  controller: firstNameController,
+                  controller: departmentController,
                   icon: CupertinoIcons.briefcase,
                   hintText: "Enter department name",
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -60,7 +63,7 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
                 ),
                 SizedBox(height: 24.h),
                 InputFormField(
-                  controller: lastNameController,
+                  controller: roleController,
                   icon: CupertinoIcons.wrench,
                   hintText: "Enter role name",
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -74,7 +77,7 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
                   hintText: "Select Store",
                   suffixIcon: const Icon(Icons.keyboard_arrow_down),
                   onTap: () async {
-                    final result = await Navigator.push(
+                    Store result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         fullscreenDialog: true,
@@ -82,16 +85,16 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
                             const StoreManagementScreen(isClickabe: true),
                       ),
                     );
-
                     setState(() {
-                      storeController.text = result;
+                      store = result as Map<String, dynamic>;
+                      storeController.text = result.name;
                     });
                   },
                 ),
                 SizedBox(height: 24.h),
                 InputFormField(
                   readOnly: true,
-                  controller: phoneController,
+                  controller: accessController,
                   icon: CupertinoIcons.lock_shield,
                   suffixIcon: Icon(
                     isModalOpen
@@ -103,7 +106,7 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
                     setState(() {
                       isModalOpen = true;
                     });
-                    await showModalBottomSheet(
+                    final staffRole = await showModalBottomSheet(
                       showDragHandle: true,
                       isScrollControlled: true,
                       context: context,
@@ -118,17 +121,50 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
                           snap: true,
                           expand: false,
                           builder: (context, scrollController) {
-                            return const SizedBox(
+                            final asyncvalue = ref.watch(roleStremProvider);
+                            return SizedBox(
                               width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Align(
+                                  const Align(
                                     alignment: Alignment.center,
                                     child: Text(
                                       "Select staff access level",
                                       textAlign: TextAlign.center,
                                     ),
+                                  ),
+                                  asyncvalue.when(
+                                    data: (data) {
+                                      final roles = data;
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Column(
+                                          children: [
+                                            ...roles.map(
+                                              (role) => GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  Navigator.pop(
+                                                      context, role.roleName);
+                                                },
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 8),
+                                                  child: Text(role.roleName),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    error: (error, stackTrace) =>
+                                        Text(error.toString()),
+                                    loading: () =>
+                                        const CupertinoActivityIndicator(),
                                   ),
                                 ],
                               ),
@@ -139,7 +175,17 @@ class _AddStaffFormScreenTwoState extends ConsumerState<AddStaffFormScreenTwo> {
                     );
                     setState(() {
                       isModalOpen = false;
+                      accessController.text = staffRole;
                     });
+
+                    ref.read(staffProvider.notifier).updateAdditionalInfo(
+                          department: departmentController.text,
+                          roleName: roleController.text,
+                          storeId: store['id'],
+                          storeName: store['name'],
+                          access: accessController.text,
+                          storeLocation: store['location'],
+                        );
                   },
                 ),
                 SizedBox(height: 32.h),

@@ -16,7 +16,7 @@ import 'package:zaccount/screens/terms.dart';
 import 'package:zaccount/screens/welcome.dart';
 import 'package:zaccount/utils/alert_user.dart';
 import 'package:zaccount/utils/constants.dart';
-import 'package:zaccount/utils/gamil_sign_in.dart';
+import 'package:zaccount/utils/gmail_sign_in.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -244,7 +244,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         setState(() {
                           isSaving = false;
                         });
-                        debugPrint(e.toString());
+
+                        if (e.code == "invalid-credential") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              content: Text("Invalid email or password"),
+                            ),
+                          );
+                        }
                       }
                     }
                     setState(() {
@@ -282,24 +292,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: InkWell(
                   onTap: () async {
-                    UserCredential userCredential = await signInWithGoogle();
-                    final res =
-                        await ref.read(companyProvider.notifier).fetchData();
-                    if (res == null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (ctx) => const WelcomeScreen(),
-                        ),
-                      );
-                      return;
+                    try {
+                      UserCredential? userCredential = await signInWithGoogle();
+                      final res =
+                          await ref.read(companyProvider.notifier).fetchData();
+                      if (res == null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => const WelcomeScreen(),
+                          ),
+                        );
+                        return;
+                      }
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => const HomeScreen(),
+                          ),
+                          (route) => false);
+                    } on FirebaseAuthException catch (e) {
+                      
                     }
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (ctx) => const HomeScreen(),
-                        ),
-                        (route) => false);
                   },
                   child: Container(
                     padding:

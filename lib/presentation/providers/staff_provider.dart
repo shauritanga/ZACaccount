@@ -43,6 +43,22 @@ class StaffNotifier extends StateNotifier<StaffDetails> {
     );
   }
 
+  updateAdditionalInfo({
+    required String department,
+    required String roleName,
+    required String storeId,
+    required String storeName,
+    required String access,
+    required String storeLocation,
+  }) {
+    state = state.copyWith(
+        department: department,
+        role: roleName,
+        storeId: storeId,
+        storeName: storeName,
+        storeLocation: storeLocation);
+  }
+
   Future<String> saveStaff(StaffDetails staff) async {
     return await staffRepositoryImpl.addStaff(staff);
   }

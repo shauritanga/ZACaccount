@@ -29,6 +29,15 @@ class _IncomeDashboardState extends ConsumerState<IncomeDashboard> {
   Widget build(BuildContext context) {
     final invoices = ref.watch(invoicesFurureProvider);
     final expenses = ref.watch(expenseFurureProvider);
+
+    List<Map<String, dynamic>> paidInvoices = invoices
+        .where((invoice) => invoice['invoiceStatus'] == 'paid')
+        .toList();
+
+    List<Map<String, dynamic>> paidExpenses = expenses
+        .where((expense) => expense['expenseStatus'] == 'paid')
+        .toList();
+
     return Scaffold(
       body: SafeArea(
         child: Card(
@@ -40,6 +49,9 @@ class _IncomeDashboardState extends ConsumerState<IncomeDashboard> {
                   controller: _pageController,
                   children: [
                     IncomeCard(
+                      subTitle: "invoice",
+                      unpaid: invoices.length - paidInvoices.length,
+                      paid: paidInvoices.length,
                       title: 'Total income this month',
                       totalIncome:
                           NumberFormat().format(getThisMonthInvoice(invoices)),
@@ -49,6 +61,9 @@ class _IncomeDashboardState extends ConsumerState<IncomeDashboard> {
                       isDecrease: true,
                     ),
                     IncomeCard(
+                      subTitle: "expense",
+                      unpaid: expenses.length - paidExpenses.length,
+                      paid: paidExpenses.length,
                       title: 'Total expense this month',
                       totalIncome:
                           NumberFormat().format(getThisMonthExpense(expenses)),
@@ -88,6 +103,9 @@ class IncomeCard extends StatelessWidget {
   final String difference;
   final bool isDecrease;
   final String title;
+  final String subTitle;
+  final int paid;
+  final int unpaid;
 
   const IncomeCard({
     super.key,
@@ -95,6 +113,9 @@ class IncomeCard extends StatelessWidget {
     required this.difference,
     required this.isDecrease,
     required this.title,
+    required this.paid,
+    required this.unpaid,
+    required this.subTitle,
   });
 
   @override
@@ -143,9 +164,11 @@ class IncomeCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _buildInvoiceStatus(Colors.amber, '0 invoice awaiting approval'),
+            _buildInvoiceStatus(Colors.amber,
+                '$unpaid $subTitle${unpaid > 1 ? 's' : ''} awaiting approval'),
             const SizedBox(height: 8),
-            _buildInvoiceStatus(Colors.green, '0 invoice awaiting approval'),
+            _buildInvoiceStatus(
+                Colors.green, '$paid paid $subTitle${paid > 1 ? 's' : ''}'),
           ],
         ),
       ),

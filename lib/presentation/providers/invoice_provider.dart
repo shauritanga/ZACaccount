@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zaccount/models/invoice.dart';
-import 'package:zaccount/models/vendor.dart';
 import 'package:zaccount/presentation/providers/order_provider.dart';
+import 'package:zaccount/presentation/providers/repository_provider.dart';
 
 final invoiceStreamProvider = StreamProvider<List<Invoice>>((ref) {
   return FirebaseFirestore.instance.collection('invoices').snapshots().map(
@@ -89,6 +89,7 @@ class InvoiceNotifier extends StateNotifier<Invoice> {
       dueDate: dueDate,
       invoiceDate: invoiceDate,
       invoiceNo: invoiceNo,
+      invoiceStatus: "unpaid",
     );
   }
 
@@ -100,6 +101,11 @@ class InvoiceNotifier extends StateNotifier<Invoice> {
       memo: memo,
       lateFees: latefee,
     );
+  }
+
+  Future<bool> deleteInvoice(String invoiceId) async {
+    final repository = ref.watch(repositoryProvider);
+    return await repository.deleteInvoice(invoiceId);
   }
 
   Future<String> addInvoice() async {
@@ -127,3 +133,17 @@ class InvoiceNotifier extends StateNotifier<Invoice> {
     }
   }
 }
+
+final invoiceAndOrderProvider =
+    FutureProvider.family<Map<String, dynamic>, String>((ref, invoiceId) async {
+  final repository = ref.watch(repositoryProvider);
+  final invoice = await repository.fetchInvoice(invoiceId);
+  final order = await repository.fetchOrder(invoice.orderId);
+  final customer = await repository.fetchCustomer(order.customerId);
+
+  return {
+    'invoice': invoice,
+    'order': order,
+    'customer': customer,
+  };
+});

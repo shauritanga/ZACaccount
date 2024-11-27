@@ -396,11 +396,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         setState(() {
                           _isSaving = false;
                         });
-                      } catch (e) {
+                      } on FirebaseAuthException catch (e) {
                         setState(() {
                           _isSaving = false;
                         });
-                        print(e);
+                        if (e.code == "email-already-in-use") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              content: Text(
+                                  "Email already in use with another account"),
+                            ),
+                          );
+                        }
                       }
                     }
                   },

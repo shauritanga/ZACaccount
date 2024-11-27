@@ -26,7 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         const Dashboard(),
         const MyBusiness(),
         const ActivitiesPage(),
-        SettingsPage(),
+        const SettingsPage(),
       ][ref.watch(homeProvider)],
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.white,

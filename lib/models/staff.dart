@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class StaffDetails extends Equatable {
   final String id;
@@ -15,11 +16,10 @@ class StaffDetails extends Equatable {
   final String? storeId;
   final String? storeName;
   final String? storeLocation;
-
   final DateTime createdAt;
   final DateTime updatedAt;
-  const StaffDetails({
-    required this.id,
+  StaffDetails({
+    String? id,
     this.firstName,
     this.lastName,
     this.email,
@@ -31,7 +31,7 @@ class StaffDetails extends Equatable {
     this.storeLocation,
     required this.createdAt,
     required this.updatedAt,
-  });
+  }) : id = id ?? const Uuid().v4();
 
   StaffDetails copyWith({
     String? id,

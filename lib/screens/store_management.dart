@@ -178,7 +178,7 @@ class _StoreManagementScreenState extends ConsumerState<StoreManagementScreen> {
                       region: store.address.country,
                       onTap: widget.isClickabe
                           ? () {
-                              Navigator.pop(context, store.name);
+                              Navigator.pop(context, store);
                             }
                           : null,
                     );

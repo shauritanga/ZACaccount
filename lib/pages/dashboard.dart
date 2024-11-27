@@ -4,10 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
-import 'package:zaccount/presentation/providers/expense_provider.dart';
 import 'package:zaccount/presentation/providers/home_provider.dart';
-import 'package:zaccount/presentation/providers/invoice_provider.dart';
-import 'package:zaccount/presentation/providers/user_data_provider.dart';
 import 'package:zaccount/screens/add_customer.dart';
 import 'package:zaccount/screens/add_expense.dart';
 import 'package:zaccount/screens/add_invoice.dart';
@@ -49,12 +46,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
     final company = ref.watch(companyProvider);
-
-    final invoices = ref.watch(invoicesFurureProvider);
-    final expenses = ref.watch(expenseFurureProvider);
-
     
     return Scaffold(
       body: CustomScrollView(

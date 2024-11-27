@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:zaccount/models/customer.dart';
-import 'package:zaccount/models/vendor.dart';
 import 'package:zaccount/presentation/providers/customer_provider.dart';
 import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/utils/phone_number_formater.dart';

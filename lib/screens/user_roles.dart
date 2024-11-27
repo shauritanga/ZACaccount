@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zaccount/models/custom_permissions.dart';
+import 'package:zaccount/models/role.dart';
 
 class UserRolesScreen extends ConsumerStatefulWidget {
-  const UserRolesScreen({super.key});
+  const UserRolesScreen({required this.permissions, super.key});
+  final CustomPermissions permissions;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -12,10 +16,42 @@ class UserRolesScreen extends ConsumerStatefulWidget {
 }
 
 class _UserRolesScreenState extends ConsumerState<UserRolesScreen> {
-  bool _isSwitchOn = false;
-  final permissions = [];
+  final TextEditingController _roleNameController = TextEditingController();
+  final CustomPermissions _permissions = CustomPermissions();
+
+  void _saveRole() {
+    final roleName = _roleNameController.text.trim();
+
+    if (roleName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Role name cannot be empty')),
+      );
+      return;
+    }
+
+    // Create Role object
+    final newRole = Role(roleName: roleName, permissions: _permissions);
+
+    // Save to Firestore or any database
+    // Example for Firestore:
+    FirebaseFirestore.instance
+        .collection('roles')
+        .add(newRole.toMap())
+        .then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Role saved successfully')),
+      );
+      Navigator.pop(context);
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save role: $error')),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final permissionsMap = _permissions.toMap();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -29,107 +65,81 @@ class _UserRolesScreenState extends ConsumerState<UserRolesScreen> {
         ),
         title: const Text("Create User Roles"),
         bottom: PreferredSize(
-          preferredSize: const Size(double.infinity, 50),
+          preferredSize: const Size(double.infinity, 64),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Enter role title",
-                hintStyle: const TextStyle(color: Colors.grey),
-                isDense: true,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey.shade500),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _roleNameController,
+                  decoration: InputDecoration(
+                    hintText: "Enter role title",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    isDense: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade500),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade500),
+                    ),
+                  ),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey.shade500),
-                ),
+                const SizedBox(height: 4),
+                const Text("Permissions"),
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: ListView(
+        children: permissionsMap.keys.map((entry) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(entry),
+                Transform.scale(
+                  scale: 0.7,
+                  child: Switch(
+                    value: permissionsMap[entry]!,
+                    onChanged: (value) {
+                      setState(() {
+                        _permissions.updateFromMap({entry: value});
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                minimumSize: Size(double.infinity, 56.h),
+                backgroundColor: Theme.of(context).primaryColor),
+            onPressed: () {
+              _saveRole();
+            },
+            child: const Text(
+              "Add Role",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
               ),
             ),
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _SingleStickyHeaderDelegate(
-              minHeight: 30,
-              maxHeight: 50,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: const Text("Permissions"),
-                ),
-              ),
-            ),
-          ),
-          SliverList.separated(
-            itemCount: CustomPermissions.permissions.length,
-            itemBuilder: (context, index) {
-              final permission = CustomPermissions.permissions[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(permission),
-                  trailing: Transform.scale(
-                    scale:
-                        0.8, // Change this value to scale up or down the switch size
-                    child: Switch(
-                      value: _isSwitchOn,
-                      onChanged: (bool value) {
-                        setState(() {
-                          _isSwitchOn = value;
-                        });
-                      },
-                    ),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _isSwitchOn = !_isSwitchOn;
-                    });
-                  },
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                indent: 16.0,
-                height: 0,
-              );
-            },
-          ),
-        ],
-      ),
     );
-  }
-}
-
-class _SingleStickyHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  _SingleStickyHeaderDelegate(
-      {required this.minHeight, required this.maxHeight, required this.child});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true; // Always rebuild to update content as you scroll.
   }
 }

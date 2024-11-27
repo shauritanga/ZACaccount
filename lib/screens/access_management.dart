@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:zaccount/presentation/providers/store_provider.dart';
+import 'package:zaccount/models/custom_permissions.dart';
+import 'package:zaccount/presentation/providers/role_provider.dart';
+import 'package:zaccount/screens/role_details.dart';
 import 'package:zaccount/screens/user_roles.dart';
 import 'package:zaccount/shared/widgets/custom_search_box.dart';
-import 'package:zaccount/shared/widgets/store_tile.dart';
 
 class AccessManagementScreen extends ConsumerStatefulWidget {
   const AccessManagementScreen({this.isClickabe = false, super.key});
@@ -19,9 +20,10 @@ class AccessManagementScreen extends ConsumerStatefulWidget {
 
 class _AccessManagementScreenState
     extends ConsumerState<AccessManagementScreen> {
+  final permissions = CustomPermissions();
   @override
   Widget build(BuildContext context) {
-    final asyncValue = ref.watch(storeStreamProvider);
+    final asyncValue = ref.watch(roleStremProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -92,7 +94,9 @@ class _AccessManagementScreenState
                               context,
                               MaterialPageRoute(
                                 fullscreenDialog: true,
-                                builder: (ctx) => const UserRolesScreen(),
+                                builder: (ctx) => UserRolesScreen(
+                                  permissions: permissions,
+                                ),
                               ),
                             );
                           },
@@ -157,10 +161,8 @@ class _AccessManagementScreenState
               }
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 16.w),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListView.builder(
@@ -168,17 +170,32 @@ class _AccessManagementScreenState
                   shrinkWrap: true,
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    final store = data[index];
-                    return StoreListTile(
-                      phoneNumber: store.phone,
-                      storeName: store.name,
-                      district: store.address.city,
-                      region: store.address.country,
-                      onTap: widget.isClickabe
-                          ? () {
-                              Navigator.pop(context, store.name);
-                            }
-                          : null,
+                    final role = data[index];
+                    return GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => RoleDetailsScreen(
+                              role: role,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 16.h),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          role.roleName,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
                     );
                   },
                 ),

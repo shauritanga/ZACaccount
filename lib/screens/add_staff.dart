@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:zaccount/presentation/providers/staff_provider.dart';
 import 'package:zaccount/screens/add_staff_two.dart';
 import 'package:zaccount/shared/widgets/input_form_field.dart';
 
@@ -114,6 +115,12 @@ class _AddStaffFormScreenState extends ConsumerState<AddStaffFormScreen> {
                   ),
                   onPressed: isButtonEnabled
                       ? () {
+                          ref.read(staffProvider.notifier).updatePersonalInfo(
+                                firstName: firstNameController.text,
+                                lastName: lastNameController.text,
+                                email: emailController.text,
+                                phone: phoneController.text,
+                              );
                           Navigator.push(
                             context,
                             MaterialPageRoute(

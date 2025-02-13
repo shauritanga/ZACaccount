@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/tin_number.dart';
-import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 class PersonPhoneScreen extends ConsumerStatefulWidget {
@@ -49,7 +48,10 @@ class _PersonPhoneScreenState extends ConsumerState<PersonPhoneScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -103,8 +105,6 @@ class _PersonPhoneScreenState extends ConsumerState<PersonPhoneScreen> {
                 const SizedBox(height: 32),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(8),
-                  color: lightGrey,
                   child: TextButton(
                     onPressed: isButtonEnabled
                         ? () {

@@ -20,6 +20,7 @@ class AddProductScreen extends ConsumerStatefulWidget {
 class _AddProductScreenState extends ConsumerState<AddProductScreen> {
   bool productDetailstouched = false;
   bool inventoryDetailstouched = false;
+  bool productCategoryTouched = false;
   bool incomeAccountTouched = false;
   bool isSaving = false;
   @override
@@ -41,7 +42,6 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor,
                 fontSize: 20,
-                decoration: TextDecoration.underline,
                 decorationColor: Theme.of(context).primaryColor,
                 decorationStyle: TextDecorationStyle.solid,
               ),
@@ -110,7 +110,6 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -200,7 +199,6 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -249,33 +247,35 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                 indent: productDetailstouched ? 0 : 44.w,
                 thickness: 0.3,
               ),
-              TextButton.icon(
-                style: const ButtonStyle(
-                    padding: WidgetStatePropertyAll(EdgeInsets.zero)),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (ctx) => const ProductCategoriesScreen(),
+              productCategoryTouched && product.category.name.isNotEmpty
+                  ? Text(product.category.name)
+                  : TextButton.icon(
+                      style: const ButtonStyle(
+                          padding: WidgetStatePropertyAll(EdgeInsets.zero)),
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (ctx) => const ProductCategoriesScreen(),
+                          ),
+                        );
+                        setState(() {
+                          productCategoryTouched = true;
+                        });
+                      },
+                      icon: Icon(
+                        CupertinoIcons.add_circled_solid,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      label: Text(
+                        "Add Category",
+                        style: GoogleFonts.roboto(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  );
-                  setState(() {
-                    productDetailstouched = true;
-                  });
-                },
-                icon: Icon(
-                  CupertinoIcons.add_circled_solid,
-                  color: Theme.of(context).primaryColor,
-                ),
-                label: Text(
-                  "Add Category",
-                  style: GoogleFonts.roboto(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               Divider(
                 height: 0,
                 indent: productDetailstouched ? 0 : 44.w,
@@ -331,9 +331,6 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10)),
         child: TextButton(
           onPressed: () async {
             setState(() {
@@ -344,6 +341,7 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                   await ref.read(productProvider.notifier).addProduct();
               setState(() {
                 isSaving = false;
+                if (result.isNotEmpty) {}
               });
             } catch (e) {
               debugPrint(e.toString());

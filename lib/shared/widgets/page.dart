@@ -41,7 +41,7 @@ class _IncomeDashboardState extends ConsumerState<IncomeDashboard> {
     return Scaffold(
       body: SafeArea(
         child: Card(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           child: Column(
             children: [
               Expanded(
@@ -81,7 +81,7 @@ class _IncomeDashboardState extends ConsumerState<IncomeDashboard> {
                   controller: _pageController,
                   count: 2,
                   effect: ExpandingDotsEffect(
-                    activeDotColor: Colors.blue.shade700,
+                    activeDotColor: Theme.of(context).primaryColor,
                     dotColor: Colors.grey.shade300,
                     dotHeight: 8,
                     dotWidth: 8,
@@ -130,20 +130,14 @@ class IncomeCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               "Tsh $totalIncome",
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Row(
               children: [
                 Icon(
@@ -151,31 +145,30 @@ class IncomeCard extends StatelessWidget {
                       ? Icons.arrow_circle_down_outlined
                       : Icons.arrow_circle_up_outlined,
                   color: isDecrease ? Colors.red[400] : Colors.green[400],
-                  size: 20,
+                  size: 15,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   '$difference ${isDecrease ? 'below' : 'above'} last month',
                   style: TextStyle(
                     color: isDecrease ? Colors.red[400] : Colors.green[400],
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            _buildInvoiceStatus(Colors.amber,
+            const SizedBox(height: 12),
+            _buildInvoiceStatus(context, Colors.amber,
                 '$unpaid $subTitle${unpaid > 1 ? 's' : ''} awaiting approval'),
-            const SizedBox(height: 8),
-            _buildInvoiceStatus(
-                Colors.green, '$paid paid $subTitle${paid > 1 ? 's' : ''}'),
+            _buildInvoiceStatus(context, Colors.green,
+                '$paid paid $subTitle${paid > 1 ? 's' : ''}'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInvoiceStatus(Color color, String text) {
+  Widget _buildInvoiceStatus(context, Color color, String text) {
     return Row(
       children: [
         Container(
@@ -189,10 +182,7 @@ class IncomeCard extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 14,
-          ),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );

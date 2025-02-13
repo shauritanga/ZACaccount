@@ -153,10 +153,10 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
                             Text(customer.displayName),
                             Text(customer.email),
                             Text(
-                              "${customer.shippingAddress!.street},${customer.shippingAddress!.unitNumber}",
+                              "${customer.shippingAddress?.street},${customer.shippingAddress?.unitNumber}",
                             ),
                             Text(
-                              "${customer.shippingAddress!.city},${customer.shippingAddress!.country}",
+                              "${customer.shippingAddress?.city},${customer.shippingAddress?.country}",
                             ),
                             SizedBox(height: 5.h),
                           ],
@@ -176,7 +176,7 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
                           );
                           setState(() {
                             isCustomerTouched = true;
-                            customer = result;
+                            customer = result ?? Customer();
                           });
 
                           ref
@@ -280,18 +280,19 @@ class _AddInvoiceScreenState extends ConsumerState<AddInvoiceScreen> {
                         builder: (ctx) => const ProductsScreen(),
                       ),
                     );
-
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (ctx) =>
-                            ProductOrderDetails(productInfo: result),
-                      ),
-                    );
-                    setState(() {
-                      isProductTouched = true;
-                    });
+                    if (result != null) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (ctx) =>
+                              ProductOrderDetails(productInfo: result),
+                        ),
+                      );
+                      setState(() {
+                        isProductTouched = true;
+                      });
+                    }
                   },
                   icon: Icon(
                     CupertinoIcons.add_circled_solid,

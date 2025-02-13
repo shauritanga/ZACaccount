@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/screens/person_names.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class WelcomeScreenTwo extends StatelessWidget {
   const WelcomeScreenTwo({super.key});
@@ -12,6 +11,14 @@ class WelcomeScreenTwo extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.keyboard_arrow_left,
+              color: Theme.of(context).primaryColor,
+            )),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -60,7 +67,7 @@ class WelcomeScreenTwo extends StatelessWidget {
                   height: 36,
                   width: 36,
                   decoration: BoxDecoration(
-                    color: primary,
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: const Icon(
@@ -71,7 +78,8 @@ class WelcomeScreenTwo extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   "Tell us about yourself",
-                  style: GoogleFonts.roboto(color: primary, fontSize: 18),
+                  style: GoogleFonts.roboto(
+                      color: Theme.of(context).primaryColor, fontSize: 18),
                 )
               ],
             ),
@@ -102,7 +110,6 @@ class WelcomeScreenTwo extends StatelessWidget {
             const SizedBox(height: 32),
             Container(
               padding: const EdgeInsets.all(8),
-              color: lightGrey,
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -114,7 +121,8 @@ class WelcomeScreenTwo extends StatelessWidget {
                 style: ButtonStyle(
                     foregroundColor:
                         const WidgetStatePropertyAll<Color>(Colors.white),
-                    backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                    backgroundColor: WidgetStatePropertyAll<Color>(
+                        Theme.of(context).primaryColor),
                     shape: WidgetStatePropertyAll<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),

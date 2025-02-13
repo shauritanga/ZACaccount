@@ -39,7 +39,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
     _controller.addListener(() {
       setState(() {
         _isAppBarExpanded = _controller.hasClients &&
-            _controller.offset < (160.0 - kToolbarHeight);
+            _controller.offset < (100.0 - kToolbarHeight);
       });
     });
   }
@@ -47,7 +47,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final company = ref.watch(companyProvider);
-    
+
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
@@ -125,7 +125,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             icon: HugeIcons.strokeRoundedDocumentValidation,
                             onTap: () async {
                               await showModalBottomSheet(
-                                backgroundColor: Colors.white,
                                 context: context,
                                 isScrollControlled: true,
                                 isDismissible: true,
@@ -154,7 +153,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             icon: HugeIcons.strokeRoundedInvoice03,
                             onTap: () async {
                               await showModalBottomSheet(
-                                backgroundColor: Colors.white,
                                 context: context,
                                 isScrollControlled: true,
                                 isDismissible: true,
@@ -183,7 +181,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             icon: HugeIcons.strokeRoundedCodesandbox,
                             onTap: () async {
                               await showModalBottomSheet(
-                                backgroundColor: Colors.white,
                                 context: context,
                                 isScrollControlled: true,
                                 isDismissible: true,
@@ -212,7 +209,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             icon: HugeIcons.strokeRoundedUserAccount,
                             onTap: () async {
                               await showModalBottomSheet(
-                                backgroundColor: Colors.white,
                                 context: context,
                                 isScrollControlled: true,
                                 isDismissible: true,
@@ -243,7 +239,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             icon: HugeIcons.strokeRoundedAbacus,
                             onTap: () async {
                               await showModalBottomSheet(
-                                backgroundColor: Colors.white,
                                 context: context,
                                 isScrollControlled: true,
                                 isDismissible: true,
@@ -273,7 +268,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 );
               },
             ),
-            expandedHeight: 200,
+            expandedHeight: _isAppBarExpanded ? 160 : 100,
           ),
           SliverList(
             delegate: SliverChildListDelegate(
@@ -374,7 +369,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16.0),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   height: 300,

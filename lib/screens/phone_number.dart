@@ -43,7 +43,10 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(

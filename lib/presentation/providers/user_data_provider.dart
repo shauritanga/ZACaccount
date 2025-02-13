@@ -64,7 +64,6 @@ class UserNotifier extends StateNotifier<LocalUser> {
     state = state.copyWith(
       user: state.user?.copyWith(firstName: firstname, lastName: lastname),
     );
-    print(state.user?.firstName);
   }
 
   Future<void> updateImage(File image) async {

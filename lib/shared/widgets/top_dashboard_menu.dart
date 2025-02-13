@@ -33,7 +33,7 @@ class Menu extends StatelessWidget {
               color: Colors.green,
             ),
           ),
-          _isAppBarExpanded ? const SizedBox(height: 4) : Container(),
+          _isAppBarExpanded ? const SizedBox(height: 4) : const SizedBox(),
           _isAppBarExpanded
               ? Text(
                   title,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zaccount/models/customer_tag.dart';
 import 'package:zaccount/models/product_category.dart';
 import 'package:zaccount/models/product_info.dart';
 
@@ -47,7 +48,7 @@ class ProductNotifier extends StateNotifier<ProductInfo> {
   }
 
   void updateProductCategory({required ProductCategory category}) {
-    state = state.copyWith(category: [...state.category, category]);
+    state = state.copyWith(category: category);
   }
 
   void updateIncomeAccount({required String incomeAccount}) {
@@ -56,7 +57,15 @@ class ProductNotifier extends StateNotifier<ProductInfo> {
 
   Future<String> addProduct() async {
     DocumentReference reference =
-        await _firestore.collection("products").add(state.toJson());
+        await _firestore.collection("products").add(state.toMap());
     return reference.id;
   }
 }
+
+//Customer Tag
+final productTagProvider = StreamProvider<List<CustomerTag>>((ref) {
+  return FirebaseFirestore.instance.collection('product-tags').snapshots().map(
+        (snapshot) =>
+            snapshot.docs.map((doc) => CustomerTag.fromDocument(doc)).toList(),
+      );
+});

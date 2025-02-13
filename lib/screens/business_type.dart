@@ -5,7 +5,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/models/business_type.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/business_name.dart';
-import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/shared/widgets/custom_tile.dart';
 
 class BusinessTypeScreen extends ConsumerStatefulWidget {
@@ -27,7 +26,10 @@ class _BusinessTypeScreenState extends ConsumerState<BusinessTypeScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -70,7 +72,8 @@ class _BusinessTypeScreenState extends ConsumerState<BusinessTypeScreen> {
                           });
                           await showModalBottomSheet(
                             showDragHandle: true,
-                            backgroundColor: Colors.white,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
                             context: context,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
@@ -80,7 +83,7 @@ class _BusinessTypeScreenState extends ConsumerState<BusinessTypeScreen> {
                             ),
                             builder: (context) {
                               return Container(
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.surface,
                                 child: ListView(
                                   shrinkWrap: true,
                                   children: [
@@ -203,7 +206,6 @@ class _BusinessTypeScreenState extends ConsumerState<BusinessTypeScreen> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             padding: const EdgeInsets.all(8),
-            color: lightGrey,
             child: TextButton(
               onPressed: () {
                 ref
@@ -218,7 +220,8 @@ class _BusinessTypeScreenState extends ConsumerState<BusinessTypeScreen> {
               style: ButtonStyle(
                   foregroundColor:
                       const WidgetStatePropertyAll<Color>(Colors.white),
-                  backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                  backgroundColor: WidgetStatePropertyAll<Color>(
+                      Theme.of(context).primaryColor),
                   shape: WidgetStatePropertyAll<OutlinedBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),

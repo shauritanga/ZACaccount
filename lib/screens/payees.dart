@@ -28,7 +28,7 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: 250.h,
+            height: 230.h,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -52,28 +52,20 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Container(
-                            width: 50,
-                            height: 43,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 25.w,
-                                height: 25.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 2, 33, 80)
-                                      .withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.chevron_left,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
+                          child: Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorDark
+                                    .withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.chevron_left,
+                                  color: Colors.white,
+                                  size: 20,
                                 ),
                               ),
                             ),
@@ -90,7 +82,6 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                         GestureDetector(
                           onTap: () async {
                             await showModalBottomSheet(
-                              backgroundColor: Colors.white,
                               context: context,
                               isScrollControlled: true,
                               isDismissible: true,
@@ -113,28 +104,21 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                               },
                             );
                           },
-                          child: Container(
-                            width: 50,
-                            height: 43,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 25.w,
-                                height: 25.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 2, 33, 80)
-                                      .withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
+                          child: Center(
+                            child: Container(
+                              width: 25.w,
+                              height: 25.h,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorDark
+                                    .withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 18,
                                 ),
                               ),
                             ),
@@ -147,14 +131,15 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: CustomSearchBox(
+                      searchTitle: "Search...",
                       deviceWidth: MediaQuery.sizeOf(context).width,
                     ),
                   ),
-                  SizedBox(height: 28.h),
+                  SizedBox(height: 22.h),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 16.w),
                     width: MediaQuery.sizeOf(context).width,
-                    height: 36.h,
+                    height: 28.h,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: menu.length,
@@ -177,18 +162,18 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                               padding: const WidgetStatePropertyAll(
                                 EdgeInsets.symmetric(
                                   horizontal: 16,
-                                  vertical: 0,
                                 ),
                               ),
                               shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                             ),
                             child: Text(
                               item,
                               style: GoogleFonts.roboto(
+                                fontSize: 12,
                                 color: selectedTabIndex == index
                                     ? Colors.black
                                     : Colors.white,
@@ -213,13 +198,6 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade900,
-                        offset: const Offset(0, 1),
-                        blurRadius: 1.0,
-                      )
-                    ],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Text(
@@ -228,31 +206,27 @@ class _PayeesScreenState extends ConsumerState<PayeesScreen> {
                   ),
                 );
               }
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    final customer = data[index];
-                    return CustomerListTile(
-                      customerName: customer.displayName,
-                      email: customer.email,
-                      phone: customer.phone,
-                      onTap: () {
-                        ref
-                            .read(expenseProvider.notifier)
-                            .updatePayee(customer.displayName);
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
+              return Expanded(
+                child: Container(
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final customer = data[index];
+                      return CustomerListTile(
+                        customerName: customer.displayName,
+                        email: customer.email,
+                        phone: customer.phone,
+                        onTap: () {
+                          ref
+                              .read(expenseProvider.notifier)
+                              .updatePayee(customer.displayName);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
                 ),
               );
             },

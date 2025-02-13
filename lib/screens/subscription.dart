@@ -20,7 +20,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(16.0.r),
+        padding: EdgeInsets.all(14.0.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,21 +30,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.close, color: Colors.black),
+                    icon: Icon(Icons.close,
+                        color: Theme.of(context).primaryColor),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                   Column(
                     children: [
-                      const Text(
-                        'ZACcount',
-                        style: TextStyle(
-                          fontSize: 36,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('ZACcount',
+                          style: Theme.of(context).textTheme.headlineLarge),
                       const SizedBox(width: 8),
                       Row(
                         children: [
@@ -69,7 +64,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 54.h),
+            SizedBox(height: 44.h),
             Center(
               child: Image.asset(
                 'assets/images/zaclogo.png', // Replace with your logo's URL
@@ -95,16 +90,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),
                 ),
                 SizedBox(width: 10.w),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Unlimited Invoicing',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Effortlessly create an unlimited number of invoices\nwithout any restrictions.',
-                      style: TextStyle(color: Colors.grey),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -127,17 +122,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
-                const Column(
+                SizedBox(width: 10.w),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Multi-Staff Accounts',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Seamlessly add and manage multiple staff accounts\nwithin the app.',
-                      style: TextStyle(color: Colors.grey),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -174,7 +169,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 32.h),
+                      SizedBox(height: 24.h),
                       TextButton(
                         onPressed: () {},
                         style: ButtonStyle(
@@ -200,7 +195,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   )
                 : Column(
                     children: [
-                      SizedBox(height: 30.h),
+                      SizedBox(height: 24.h),
                       Center(
                         child: TextButton.icon(
                           onPressed: () {},
@@ -220,7 +215,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             ),
                           ),
                           minimumSize: const WidgetStatePropertyAll(
-                            Size(double.infinity, 50),
+                            Size(double.infinity, 44),
                           ),
                         ),
                         onPressed: () {},
@@ -246,7 +241,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             Colors.red.shade600,
                           ),
                           minimumSize: const WidgetStatePropertyAll(
-                            Size(double.infinity, 50),
+                            Size(double.infinity, 44),
                           ),
                         ),
                         onPressed: () {},
@@ -261,15 +256,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       SizedBox(height: 18.h),
                       TextButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              const WidgetStatePropertyAll(Colors.black),
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).colorScheme.surface),
                           shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           minimumSize: const WidgetStatePropertyAll(
-                            Size(double.infinity, 50),
+                            Size(double.infinity, 44),
                           ),
                         ),
                         onPressed: () {
@@ -318,7 +313,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),
             // Restore Purchases
 
-            const SizedBox(height: 30),
+            SizedBox(height: 26.h),
             // Terms of Service and Privacy Policy
             Center(
               child: TextButton(

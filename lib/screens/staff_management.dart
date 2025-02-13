@@ -125,6 +125,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: CustomSearchBox(
+                      searchTitle: "Search...",
                       deviceWidth: MediaQuery.sizeOf(context).width,
                     ),
                   ),

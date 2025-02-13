@@ -26,7 +26,7 @@ class ProductDetails extends StatelessWidget {
               "Cancel",
               style: GoogleFonts.roboto(
                 fontWeight: FontWeight.bold,
-                color: primary,
+                color: Theme.of(context).primaryColor,
                 fontSize: 20,
                 decoration: TextDecoration.underline,
                 decorationStyle: TextDecorationStyle.solid,
@@ -48,7 +48,7 @@ class ProductDetails extends StatelessWidget {
             onPressed: () {},
             icon: Icon(
               CupertinoIcons.phone_fill,
-              color: primary,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           GestureDetector(
@@ -62,7 +62,7 @@ class ProductDetails extends StatelessWidget {
                 "Save",
                 style: GoogleFonts.roboto(
                   fontWeight: FontWeight.bold,
-                  color: primary,
+                  color: Theme.of(context).primaryColor,
                   fontSize: 20,
                   decoration: TextDecoration.underline,
                   decorationStyle: TextDecorationStyle.solid,
@@ -81,7 +81,7 @@ class ProductDetails extends StatelessWidget {
               height: 10,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [primary, red],
+                  colors: [Theme.of(context).primaryColor, red],
                 ),
               ),
             ),
@@ -98,26 +98,14 @@ class ProductDetails extends StatelessWidget {
                     bottom: 16.h,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        offset: const Offset(0, 10),
-                        blurRadius: 5,
-                        spreadRadius: 3,
-                      ),
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        offset: const Offset(0, 5),
-                        blurRadius: 2,
-                        spreadRadius: 1,
-                      ),
-                    ],
                   ),
                   child: imageUrl.isEmpty
                       ? const Center(
-                          child: Text("No image"),
+                          child: Text(
+                            "No image",
+                          ),
                         )
                       : Image.network(
                           imageUrl,
@@ -126,33 +114,13 @@ class ProductDetails extends StatelessWidget {
                         ),
                 ),
                 Positioned(
-                  left: 80,
-                  child: Container(
-                    height: 44.h,
-                    width: 48.w,
-                    decoration: BoxDecoration(
-                      color: primary.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                  left: 95,
+                  child: Center(
                     child: Center(
-                      child: Container(
-                        height: 25.h,
-                        width: 25.w,
-                        decoration: BoxDecoration(
-                          color: primary,
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.white,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
+                      child: Icon(
+                        CupertinoIcons.add_circled_solid,
+                        color: Theme.of(context).primaryColor,
+                        size: 27,
                       ),
                     ),
                   ),
@@ -200,19 +168,17 @@ class ProductDetails extends StatelessWidget {
                     iconAlignment: IconAlignment.end,
                     icon: Icon(
                       Icons.chevron_right,
-                      color: primary,
+                      color: Theme.of(context).primaryColor,
                     ),
                     label: Text(
                       "Edit",
                       style: GoogleFonts.roboto(
-                        color: primary,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        primary.withOpacity(0.4),
-                      ),
+                      padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                       shape: WidgetStatePropertyAll(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -314,7 +280,6 @@ class ProductDetails extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ListTile(
-                tileColor: Theme.of(context).primaryColor.withOpacity(0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -332,7 +297,6 @@ class ProductDetails extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: ListTile(
-                tileColor: Theme.of(context).primaryColor.withOpacity(0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -350,7 +314,6 @@ class ProductDetails extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: ListTile(
-                tileColor: Theme.of(context).primaryColor.withOpacity(0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -368,7 +331,6 @@ class ProductDetails extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: ListTile(
-                tileColor: Theme.of(context).primaryColor.withOpacity(0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),

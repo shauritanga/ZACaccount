@@ -12,7 +12,6 @@ import 'package:zaccount/screens/privacy.dart';
 import 'package:zaccount/screens/terms.dart';
 import 'package:zaccount/screens/welcome.dart';
 import 'package:zaccount/utils/alert_user.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -68,7 +67,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -78,20 +76,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
-                      child: Container(
-                        height: 32.h,
-                        width: 32.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: lightGrey,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Icon(Icons.chevron_left,
-                            color: Colors.blue.shade900),
+                      icon: Icon(
+                        Icons.keyboard_arrow_left,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
@@ -153,7 +144,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               size: 20,
                             ),
                             filled: true,
-                            fillColor: lightGrey,
+                            fillColor: Theme.of(context).colorScheme.surface,
                             hintText: "First Name",
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14.sp),
@@ -185,7 +176,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               size: 20,
                             ),
                             filled: true,
-                            fillColor: lightGrey,
+                            fillColor: Theme.of(context).colorScheme.surface,
                             hintText: "Last Name",
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14.sp),
@@ -217,7 +208,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               size: 20,
                             ),
                             filled: true,
-                            fillColor: lightGrey,
+                            fillColor: Theme.of(context).colorScheme.surface,
                             hintText: "Email Address",
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14.sp),
@@ -255,7 +246,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               size: 20,
                             ),
                             filled: true,
-                            fillColor: lightGrey,
+                            fillColor: Theme.of(context).colorScheme.surface,
                             hintText: "Password",
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14.sp),
@@ -288,7 +279,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               size: 20,
                             ),
                             filled: true,
-                            fillColor: lightGrey,
+                            fillColor: Theme.of(context).colorScheme.surface,
                             hintText: "Confirm Password",
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14.sp),

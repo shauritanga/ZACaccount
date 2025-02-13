@@ -54,7 +54,7 @@ class Activity extends ConsumerWidget {
             return CustomListItem(
               icon: activity.icon,
               color: activity.type.toLowerCase() == "product"
-                  ? Theme.of(context).colorScheme.secondary
+                  ? Theme.of(context).primaryColor
                   : activity.type.toLowerCase() == "customer"
                       ? Colors.purple
                       : activity.type.toLowerCase() == "invoice"

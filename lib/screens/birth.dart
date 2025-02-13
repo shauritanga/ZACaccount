@@ -6,7 +6,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/models/date_of_birth.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/person_phone_number.dart';
-import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/shared/widgets/dob_input.dart';
 
 class BirthScreen extends ConsumerStatefulWidget {
@@ -26,7 +25,10 @@ class _BirthScreenState extends ConsumerState<BirthScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -77,7 +79,6 @@ class _BirthScreenState extends ConsumerState<BirthScreen> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   padding: const EdgeInsets.all(8),
-                  color: lightGrey,
                   child: TextButton(
                     onPressed: () {
                       if (kDebugMode) {
@@ -87,7 +88,7 @@ class _BirthScreenState extends ConsumerState<BirthScreen> {
                       int day = int.parse(dob.split("/")[0]);
                       int month = int.parse(dob.split("/")[1]);
                       int year = int.parse(dob.split("/")[2]);
-                      print(day);
+
                       ref.read(companyProvider.notifier).updateIndividualDOB(
                             DateOfBirth(day: day, month: month, year: year),
                           );
@@ -100,7 +101,9 @@ class _BirthScreenState extends ConsumerState<BirthScreen> {
                     style: ButtonStyle(
                         foregroundColor:
                             const WidgetStatePropertyAll<Color>(Colors.white),
-                        backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                        backgroundColor: WidgetStatePropertyAll<Color>(
+                          Theme.of(context).primaryColor,
+                        ),
                         shape: WidgetStatePropertyAll<OutlinedBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),

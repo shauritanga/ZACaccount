@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:zaccount/models/product_info.dart';
 import 'package:zaccount/models/product_item.dart';
 import 'package:zaccount/presentation/providers/order_provider.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class ProductOrderDetails extends ConsumerStatefulWidget {
   const ProductOrderDetails({super.key, required this.productInfo});
@@ -48,7 +47,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
   Widget build(BuildContext context) {
     final product = widget.productInfo;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
@@ -61,7 +60,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
               "Cancel",
               style: GoogleFonts.roboto(
                 fontWeight: FontWeight.bold,
-                color: primary,
+                color: Theme.of(context).primaryColor,
                 fontSize: 20,
                 decoration: TextDecoration.underline,
                 decorationStyle: TextDecorationStyle.solid,
@@ -104,7 +103,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -129,7 +128,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -154,7 +153,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -179,7 +178,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -197,7 +196,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
-                          Colors.grey.shade200,
+                          Theme.of(context).colorScheme.surface,
                         ),
                         foregroundColor: const WidgetStatePropertyAll(
                           Colors.black,
@@ -208,7 +207,10 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
                           ),
                         ),
                       ),
-                      child: Text(dateSelected),
+                      child: Text(
+                        dateSelected,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     )
                   ],
                 )
@@ -218,11 +220,7 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        decoration: BoxDecoration(
-            color: primary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10)),
         child: TextButton(
           onPressed: () async {
             if (formKey.currentState!.validate()) {
@@ -253,7 +251,8 @@ class _ProductOrderDetailsState extends ConsumerState<ProductOrderDetails> {
             }
           },
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(primary),
+            backgroundColor:
+                WidgetStatePropertyAll(Theme.of(context).primaryColor),
             foregroundColor: const WidgetStatePropertyAll(Colors.white),
           ),
           child: isSaving

@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
@@ -23,21 +22,17 @@ class SupportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 242, 242, 242),
-            ),
-          ),
           Container(
             width: double.infinity,
             height: 200.h,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  primary.withOpacity(0.7),
-                  primary,
+                  Theme.of(context).primaryColor.withOpacity(0.7),
+                  Theme.of(context).primaryColor,
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -89,16 +84,8 @@ class SupportScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     width: MediaQuery.sizeOf(context).width,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(
-                          offset: Offset(0, 0.09),
-                          blurRadius: 0.05,
-                          spreadRadius: 5,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,7 +192,8 @@ class SupportScreen extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               horizontal: 10.w, vertical: 5.h),
                           decoration: BoxDecoration(
-                            color: primary.withOpacity(0.2),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextButton.icon(
@@ -217,8 +205,9 @@ class SupportScreen extends StatelessWidget {
                               color: Colors.white,
                             ),
                             style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll<Color>(primary),
+                              backgroundColor: WidgetStatePropertyAll<Color>(
+                                Theme.of(context).primaryColor,
+                              ),
                             ),
                             label: Text(
                               "Send us a message",
@@ -239,11 +228,7 @@ class SupportScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       "FAQs",
-                      style: GoogleFonts.roboto(
-                        color: Colors.black,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineLarge,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -258,7 +243,8 @@ class SupportScreen extends StatelessWidget {
                     expandedAlignment: Alignment.centerLeft,
                     title: Text(
                       "How do I reset my password?",
-                      style: GoogleFonts.roboto(color: primary, fontSize: 14),
+                      style: GoogleFonts.roboto(
+                          color: Theme.of(context).primaryColor, fontSize: 14),
                     ),
                     children: [
                       Text(
@@ -279,7 +265,9 @@ class SupportScreen extends StatelessWidget {
                       expandedAlignment: Alignment.centerLeft,
                       title: Text(
                         "What payment methods do you accept?",
-                        style: GoogleFonts.roboto(color: primary, fontSize: 14),
+                        style: GoogleFonts.roboto(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 14),
                       ),
                       children: [
                         Text(
@@ -299,7 +287,8 @@ class SupportScreen extends StatelessWidget {
                     expandedAlignment: Alignment.centerLeft,
                     title: Text(
                       "Can I cancel my subscription?",
-                      style: GoogleFonts.roboto(color: primary, fontSize: 14),
+                      style: GoogleFonts.roboto(
+                          color: Theme.of(context).primaryColor, fontSize: 14),
                     ),
                     children: [
                       Text(

@@ -48,7 +48,10 @@ class _CompanyTinNumberScreenState
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -86,7 +89,7 @@ class _CompanyTinNumberScreenState
                   child: TextButton(
                     onPressed: () {
                       showModalBottomSheet(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
                         context: context,
                         isScrollControlled: true,
                         isDismissible: true,
@@ -104,7 +107,8 @@ class _CompanyTinNumberScreenState
                             expand: true,
                             builder: (context, scrollController) {
                               return Scaffold(
-                                backgroundColor: Colors.white,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.surface,
                                 body: CustomScrollView(
                                   slivers: [
                                     SliverList(

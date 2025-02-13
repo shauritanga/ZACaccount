@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '80114757459',
     projectId: 'shaccount',
     storageBucket: 'shaccount.firebasestorage.app',
+    androidClientId: '80114757459-pe15if6dpsfg8vo5cqrivotkmn4u9jjh.apps.googleusercontent.com',
+    iosClientId: '80114757459-d1q23fctb1hgk390apbr9gfa5ua550u0.apps.googleusercontent.com',
     iosBundleId: 'com.shauritanga.zaccount',
   );
 

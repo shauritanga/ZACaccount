@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zaccount/models/activity.dart';
 import 'package:zaccount/presentation/providers/customer_provider.dart';
@@ -14,7 +15,8 @@ final activitiyFutureProvider = FutureProvider<List<Activity>>((ref) async {
   final products = await ref.watch(productStreamProvider.future);
   final invoices = await ref.watch(invoiceStreamProvider.future);
   final expenses = await ref.watch(expenseStreamProvider.future);
-  final searchQuery = ref.watch(searchQueryProvider);
+
+  final filter = ref.watch(filterProvider);
 
   activities.addAll(
     customers.map((customer) {
@@ -67,7 +69,7 @@ final activitiyFutureProvider = FutureProvider<List<Activity>>((ref) async {
   activities.addAll(vendors.map((vendor) {
     return Activity(
       id: vendor.id,
-      icon: CupertinoIcons.person,
+      icon: Icons.location_city,
       type: "vendor",
       name: vendor.displayName,
       status: "vendor",
@@ -76,7 +78,30 @@ final activitiyFutureProvider = FutureProvider<List<Activity>>((ref) async {
     );
   }));
 
-  return activities;
+  switch (filter) {
+    case 'all':
+      return activities;
+    case 'vendor':
+      return activities.where((activity) => activity.type == "vendor").toList();
+    case 'customer':
+      return activities
+          .where((activity) => activity.type == "customer")
+          .toList();
+    case 'product':
+      return activities
+          .where((activity) => activity.type == "product")
+          .toList();
+    case 'invoice':
+      return activities
+          .where((activity) => activity.type == "invoice")
+          .toList();
+    case 'expense':
+      return activities
+          .where((activity) => activity.type == "expense")
+          .toList();
+  }
+  return [];
 });
 
 final searchQueryProvider = StateProvider<String>((ref) => "");
+final filterProvider = StateProvider<String>((ref) => 'all');

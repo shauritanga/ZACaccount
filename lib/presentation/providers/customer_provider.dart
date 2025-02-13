@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zaccount/models/address.dart';
 import 'package:zaccount/models/customer.dart';
+import 'package:zaccount/models/customer_tag.dart';
 
 final customersFutureProvider = FutureProvider<List<Customer>>((ref) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -126,3 +127,11 @@ class CustomerNotifier extends StateNotifier<Customer> {
     return reference.id;
   }
 }
+
+//Customer Tag
+final customerTagProvider = StreamProvider<List<CustomerTag>>((ref) {
+  return FirebaseFirestore.instance.collection('customer-tags').snapshots().map(
+        (snapshot) =>
+            snapshot.docs.map((doc) => CustomerTag.fromDocument(doc)).toList(),
+      );
+});

@@ -5,7 +5,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/home.dart';
 import 'package:zaccount/tria.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class CongratulationScreen extends ConsumerStatefulWidget {
   const CongratulationScreen({super.key});
@@ -39,7 +38,10 @@ class _CongratulationScreenState extends ConsumerState<CongratulationScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -85,8 +87,6 @@ class _CongratulationScreenState extends ConsumerState<CongratulationScreen> {
             const SizedBox(height: 32),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(8),
-              color: lightGrey,
               child: TextButton(
                 onPressed: () async {
                   await showLoadingDialog(context);
@@ -100,7 +100,9 @@ class _CongratulationScreenState extends ConsumerState<CongratulationScreen> {
                 style: ButtonStyle(
                   foregroundColor:
                       const WidgetStatePropertyAll<Color>(Colors.white),
-                  backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                  backgroundColor: WidgetStatePropertyAll<Color>(
+                    Theme.of(context).primaryColor,
+                  ),
                   shape: WidgetStatePropertyAll<OutlinedBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),

@@ -10,7 +10,6 @@ import 'package:zaccount/screens/vendor_address_details.dart';
 import 'package:zaccount/screens/vendor_bank_datails.dart';
 import 'package:zaccount/screens/vendor_company_details.dart';
 import 'package:zaccount/screens/vendor_staff_details.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class AddVendorScreen extends ConsumerStatefulWidget {
   const AddVendorScreen({required this.title, super.key});
@@ -45,7 +44,7 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
               "Cancel",
               style: GoogleFonts.roboto(
                 fontWeight: FontWeight.bold,
-                color: primary,
+                color: Theme.of(context).primaryColor,
                 fontSize: 20,
                 decoration: TextDecoration.underline,
                 decorationStyle: TextDecorationStyle.solid,
@@ -95,7 +94,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -121,12 +119,12 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                       },
                       icon: Icon(
                         CupertinoIcons.add_circled_solid,
-                        color: primary,
+                        color: Theme.of(context).primaryColor,
                       ),
                       label: Text(
                         "Add Company Details",
                         style: GoogleFonts.roboto(
-                          color: primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -148,7 +146,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                   ? GestureDetector(
                       onTap: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -191,7 +188,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -217,12 +213,12 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                       },
                       icon: Icon(
                         CupertinoIcons.add_circled_solid,
-                        color: primary,
+                        color: Theme.of(context).primaryColor,
                       ),
                       label: Text(
                         "Add Staff Details",
                         style: GoogleFonts.roboto(
-                          color: primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -260,7 +256,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -286,12 +281,12 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                       },
                       icon: Icon(
                         CupertinoIcons.add_circled_solid,
-                        color: primary,
+                        color: Theme.of(context).primaryColor,
                       ),
                       label: Text(
                         "Add Address",
                         style: GoogleFonts.roboto(
-                          color: primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -313,7 +308,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                   ? GestureDetector(
                       onTap: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -356,7 +350,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -382,12 +375,12 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                       },
                       icon: Icon(
                         CupertinoIcons.add_circled_solid,
-                        color: primary,
+                        color: Theme.of(context).primaryColor,
                       ),
                       label: Text(
                         "Add Bank Details",
                         style: GoogleFonts.roboto(
-                          color: primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -409,7 +402,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                   ? GestureDetector(
                       onTap: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -450,7 +442,6 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -476,12 +467,12 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
                       },
                       icon: Icon(
                         CupertinoIcons.add_circled_solid,
-                        color: primary,
+                        color: Theme.of(context).primaryColor,
                       ),
                       label: Text(
                         "Add Other Details",
                         style: GoogleFonts.roboto(
-                          color: primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -496,11 +487,8 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        decoration: BoxDecoration(
-            color: primary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: TextButton(
           onPressed: () async {
             setState(() {
@@ -525,7 +513,9 @@ class _AddVendorScreenState extends ConsumerState<AddVendorScreen> {
             }
           },
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(primary),
+            backgroundColor: WidgetStatePropertyAll(
+              Theme.of(context).primaryColor,
+            ),
             foregroundColor: const WidgetStatePropertyAll(Colors.white),
           ),
           child: isSaving

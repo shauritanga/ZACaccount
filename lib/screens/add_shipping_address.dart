@@ -137,12 +137,6 @@ class _CustomerShippingAddressFormState
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(
-              10,
-            ),
-          ),
           child: TextButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {

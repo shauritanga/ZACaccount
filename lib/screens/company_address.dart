@@ -10,7 +10,6 @@ import 'package:zaccount/presentation/providers/distric_provider.dart';
 import 'package:zaccount/screens/company_tin_number.dart';
 import 'package:zaccount/screens/districts.dart';
 import 'package:zaccount/screens/regions.dart';
-import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/shared/widgets/input_form_field.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
@@ -58,7 +57,8 @@ class _CompanyAddressScreenState extends ConsumerState<CompanyAddressScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(HugeIcons.strokeRoundedArrowLeft01,
+              color: Theme.of(context).primaryColor),
         ),
       ),
       body: SingleChildScrollView(
@@ -200,7 +200,9 @@ class _CompanyAddressScreenState extends ConsumerState<CompanyAddressScreen> {
                             });
                           },
                           activeColor: Colors.white,
-                          trackColor: WidgetStatePropertyAll(primary),
+                          trackColor: WidgetStatePropertyAll(
+                            Theme.of(context).primaryColor,
+                          ),
                         ),
                       ),
                     ),
@@ -333,10 +335,8 @@ class _CompanyAddressScreenState extends ConsumerState<CompanyAddressScreen> {
                         ],
                       ),
                 const SizedBox(height: 32),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(8),
-                  color: lightGrey,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextButton(
                     onPressed: () {
                       ref
@@ -382,7 +382,8 @@ class _CompanyAddressScreenState extends ConsumerState<CompanyAddressScreen> {
                     style: ButtonStyle(
                         foregroundColor:
                             const WidgetStatePropertyAll<Color>(Colors.white),
-                        backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                        backgroundColor: WidgetStatePropertyAll<Color>(
+                            Theme.of(context).primaryColor),
                         shape: WidgetStatePropertyAll<OutlinedBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),

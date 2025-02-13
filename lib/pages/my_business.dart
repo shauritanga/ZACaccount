@@ -129,7 +129,8 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(
-                                              0) // Removes the top rounded corners
+                                        0,
+                                      ) // Removes the top rounded corners
                                           ),
                                     ),
                                     builder: (context) {
@@ -238,7 +239,7 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                                   decoration: BoxDecoration(
                                     color: Theme.of(context)
                                         .primaryColor
-                                        .withBlue(90),
+                                        .withRed(230),
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       bottomLeft: Radius.circular(10),
@@ -275,7 +276,7 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                                 decoration: BoxDecoration(
                                   color: Theme.of(context)
                                       .primaryColor
-                                      .withBlue(90),
+                                      .withRed(230),
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
@@ -323,11 +324,10 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
+                              boxShadow: const [
                                 BoxShadow(
-                                  offset: const Offset(0, 5),
-                                  blurRadius: 5,
-                                  color: Colors.grey.shade800,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 0.5,
                                 )
                               ],
                             ),
@@ -540,7 +540,6 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                                       offset: Offset(1, 1),
                                       blurRadius: 1,
                                       spreadRadius: 2.0,
-                                      color: Colors.grey,
                                     )
                                   ],
                                 ),
@@ -766,7 +765,6 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                                           offset: Offset(1, 1),
                                           blurRadius: 1,
                                           spreadRadius: 2.0,
-                                          color: Colors.grey,
                                         )
                                       ],
                                     ),
@@ -1003,7 +1001,6 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                                               offset: Offset(1, 1),
                                               blurRadius: 1,
                                               spreadRadius: 2.0,
-                                              color: Colors.grey,
                                             )
                                           ],
                                         ),
@@ -1252,7 +1249,6 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                             offset: Offset(1, 1),
                             blurRadius: 1,
                             spreadRadius: 2.0,
-                            color: Colors.grey,
                           )
                         ],
                       ),
@@ -1313,7 +1309,6 @@ class _MyBusinessState extends ConsumerState<MyBusiness> {
                             offset: Offset(1, 1),
                             blurRadius: 1,
                             spreadRadius: 2.0,
-                            color: Colors.grey,
                           )
                         ],
                       ),

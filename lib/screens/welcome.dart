@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/screens/introduction.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -38,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: 36,
                   width: 36,
                   decoration: BoxDecoration(
-                    color: primary,
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: const Icon(
@@ -49,7 +48,8 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   "Tell us about your business",
-                  style: GoogleFonts.roboto(color: primary, fontSize: 18),
+                  style: GoogleFonts.roboto(
+                      color: Theme.of(context).primaryColor, fontSize: 18),
                 )
               ],
             ),
@@ -104,7 +104,6 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(height: 32),
             Container(
               padding: const EdgeInsets.all(8),
-              color: lightGrey,
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -116,7 +115,8 @@ class WelcomeScreen extends StatelessWidget {
                 style: ButtonStyle(
                     foregroundColor:
                         const WidgetStatePropertyAll<Color>(Colors.white),
-                    backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                    backgroundColor: WidgetStatePropertyAll<Color>(
+                        Theme.of(context).primaryColor),
                     shape: WidgetStatePropertyAll<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),

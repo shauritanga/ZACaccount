@@ -4,13 +4,12 @@ import "package:google_fonts/google_fonts.dart";
 import "package:hugeicons/hugeicons.dart";
 import "package:zaccount/presentation/providers/company_provider.dart";
 import "package:zaccount/screens/country_operate.dart";
-import "package:zaccount/utils/constants.dart";
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  ConsumerState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends ConsumerState<SearchPage> {
@@ -72,7 +71,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(HugeIcons.strokeRoundedArrowLeft01)),
+            icon: Icon(
+              HugeIcons.strokeRoundedArrowLeft01,
+              color: Theme.of(context).primaryColor,
+            )),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -111,7 +113,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    selectedColor: primary,
+                    selectedColor: Theme.of(context).primaryColor,
                     contentPadding: EdgeInsets.zero,
                     title: Text(_filteredItems[index]),
                     trailing: _isSelected
@@ -137,8 +139,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            color: lightGrey, borderRadius: BorderRadius.circular(8)),
         child: TextButton(
           onPressed: () {
             ref
@@ -152,9 +152,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           },
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll<Color>(
-                _searchController.text.isEmpty
-                    ? Colors.grey.shade400
-                    : primary),
+              _searchController.text.isEmpty
+                  ? Colors.grey.shade400
+                  : Theme.of(context).primaryColor,
+            ),
             foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
             minimumSize: const WidgetStatePropertyAll<Size>(
               Size(double.infinity, 48),

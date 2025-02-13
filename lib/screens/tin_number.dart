@@ -45,7 +45,10 @@ class _TinNumberScreenState extends ConsumerState<TinNumberScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -83,7 +86,8 @@ class _TinNumberScreenState extends ConsumerState<TinNumberScreen> {
                   child: TextButton(
                     onPressed: () {
                       showModalBottomSheet(
-                        backgroundColor: Colors.white,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
                         context: context,
                         isScrollControlled: true,
                         isDismissible: true,
@@ -101,7 +105,8 @@ class _TinNumberScreenState extends ConsumerState<TinNumberScreen> {
                             expand: true,
                             builder: (context, scrollController) {
                               return Scaffold(
-                                backgroundColor: Colors.white,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.surface,
                                 body: CustomScrollView(
                                   slivers: [
                                     SliverList(
@@ -191,12 +196,12 @@ class _TinNumberScreenState extends ConsumerState<TinNumberScreen> {
                 const SizedBox(height: 32),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(8),
-                  color: lightGrey,
                   child: TextButton(
                     onPressed: isButtonEnabled
                         ? () {
-                          ref.read(companyProvider.notifier).updateIndividualSSNLast4(_tinController.text);
+                            ref
+                                .read(companyProvider.notifier)
+                                .updateIndividualSSNLast4(_tinController.text);
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (ctx) => const CongratulationScreen(),

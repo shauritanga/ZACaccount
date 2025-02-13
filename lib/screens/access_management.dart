@@ -134,6 +134,7 @@ class _AccessManagementScreenState
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: CustomSearchBox(
+                      searchTitle: "Search...",
                       deviceWidth: MediaQuery.sizeOf(context).width,
                     ),
                   ),
@@ -188,7 +189,7 @@ class _AccessManagementScreenState
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Text(

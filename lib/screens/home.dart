@@ -29,7 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         const SettingsPage(),
       ][ref.watch(homeProvider)],
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         labelBehavior: labelBehavior,
         selectedIndex: ref.watch(homeProvider),
         onDestinationSelected: (int index) {

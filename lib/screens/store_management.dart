@@ -132,6 +132,7 @@ class _StoreManagementScreenState extends ConsumerState<StoreManagementScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: CustomSearchBox(
+                      searchTitle: "Search...",
                       deviceWidth: MediaQuery.sizeOf(context).width,
                     ),
                   ),
@@ -162,7 +163,7 @@ class _StoreManagementScreenState extends ConsumerState<StoreManagementScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListView.builder(

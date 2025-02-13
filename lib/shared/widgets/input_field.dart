@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.hintText,
     this.validator,
     this.inputFormatters,
+    this.onChanged,
   });
 
   final TextInputType? keyboardType;
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Widget icon;
   final String hintText;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +31,13 @@ class CustomTextFormField extends StatelessWidget {
           color: Colors.grey.shade400,
         ),
         filled: true,
-        fillColor: const Color.fromARGB(255, 238, 238, 238),
+        fillColor: Theme.of(context).colorScheme.surface,
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
         ),
       ),
       onSaved: onSaved,
+      onChanged: onChanged,
       validator: validator,
       inputFormatters: inputFormatters,
       keyboardType: keyboardType,

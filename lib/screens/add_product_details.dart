@@ -23,7 +23,7 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
@@ -36,9 +36,8 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
               "Cancel",
               style: GoogleFonts.roboto(
                 fontWeight: FontWeight.bold,
-                color: primary,
+                color: Theme.of(context).primaryColor,
                 fontSize: 20,
-                decoration: TextDecoration.underline,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),
@@ -80,7 +79,7 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -114,7 +113,7 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -149,7 +148,7 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -162,20 +161,23 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
                 SizedBox(height: 6.h),
                 TextFormField(
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          width: 0.5,
-                          color: Colors.grey,
-                        ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        width: 0.5,
+                        color: Colors.grey,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          width: 0.5,
-                          color: Colors.grey,
-                        ),
-                      )),
+                    ),
+                    // filled: true,
+                    // fillColor: Theme.of(context).colorScheme.surface,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        width: 0.5,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
                   maxLines: 3,
                   onSaved: (value) => description = value!,
                 ),
@@ -186,7 +188,7 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -213,44 +215,44 @@ class _ProductDetailsFormState extends ConsumerState<ProductDetailsForm> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        decoration: BoxDecoration(
-            color: primary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10)),
-        child: TextButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              formKey.currentState?.save();
-
-              setState(() {
-                isSaving = true;
-              });
-
-              try {
-                ref.read(productProvider.notifier).updateProductDetails(
-                      productName: productName,
-                      cost: productCost,
-                      salePrice: sellingPrice,
-                      description: description,
-                    );
+        child: SafeArea(
+          child: TextButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                formKey.currentState?.save();
 
                 setState(() {
-                  isSaving = false;
+                  isSaving = true;
                 });
-                Navigator.pop(context);
-              } catch (e) {
-                debugPrint(e.toString());
+
+                try {
+                  ref.read(productProvider.notifier).updateProductDetails(
+                        productName: productName,
+                        cost: productCost,
+                        salePrice: sellingPrice,
+                        description: description,
+                      );
+
+                  setState(() {
+                    isSaving = false;
+                  });
+                  Navigator.pop(context);
+                } catch (e) {
+                  debugPrint(e.toString());
+                }
               }
-            }
-          },
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(primary),
-            foregroundColor: const WidgetStatePropertyAll(Colors.white),
+            },
+            style: ButtonStyle(
+              backgroundColor:
+                  WidgetStatePropertyAll(Theme.of(context).primaryColor),
+              foregroundColor: const WidgetStatePropertyAll(Colors.white),
+            ),
+            child: isSaving
+                ? const CupertinoActivityIndicator(
+                    color: Colors.white,
+                  )
+                : const Text("Save Product Details"),
           ),
-          child: isSaving
-              ? const CupertinoActivityIndicator(
-                  color: Colors.white,
-                )
-              : const Text("Save Product Details"),
         ),
       ),
     );

@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:zaccount/presentation/providers/product_provider.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class ProductInventoryDetailsForm extends ConsumerStatefulWidget {
   const ProductInventoryDetailsForm({super.key});
@@ -44,8 +43,9 @@ class _ProductInventoryDetailsFormState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -57,9 +57,8 @@ class _ProductInventoryDetailsFormState
               "Cancel",
               style: GoogleFonts.roboto(
                 fontWeight: FontWeight.bold,
-                color: primary,
+                color: Theme.of(context).primaryColor,
                 fontSize: 20,
-                decoration: TextDecoration.underline,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),
@@ -99,7 +98,7 @@ class _ProductInventoryDetailsFormState
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -123,7 +122,7 @@ class _ProductInventoryDetailsFormState
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -148,7 +147,7 @@ class _ProductInventoryDetailsFormState
                       color: Colors.grey,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12),
@@ -166,10 +165,10 @@ class _ProductInventoryDetailsFormState
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
-                          Colors.grey.shade200,
+                          Theme.of(context).colorScheme.surface,
                         ),
-                        foregroundColor: const WidgetStatePropertyAll(
-                          Colors.black,
+                        foregroundColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.onSurface,
                         ),
                         shape: WidgetStatePropertyAll(
                           RoundedRectangleBorder(
@@ -189,9 +188,6 @@ class _ProductInventoryDetailsFormState
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        decoration: BoxDecoration(
-            color: primary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10)),
         child: TextButton(
           onPressed: () async {
             if (formKey.currentState!.validate()) {
@@ -218,7 +214,8 @@ class _ProductInventoryDetailsFormState
             }
           },
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(primary),
+            backgroundColor:
+                WidgetStatePropertyAll(Theme.of(context).primaryColor),
             foregroundColor: const WidgetStatePropertyAll(Colors.white),
           ),
           child: isSaving

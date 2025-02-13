@@ -169,7 +169,6 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                       ),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -293,7 +292,6 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                       ),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -406,7 +404,6 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                       ),
                       onPressed: () async {
                         await showModalBottomSheet(
-                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           isDismissible: true,
@@ -450,49 +447,48 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10)),
-        child: TextButton(
-          onPressed: () async {
-            setState(() {
-              isSaving = true;
-            });
-            String result =
-                await ref.read(customerProvider.notifier).addCustomer();
-            setState(() {
-              isSaving = false;
-            });
-            if (result.isEmpty) {
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: TextButton(
+            onPressed: () async {
+              setState(() {
+                isSaving = true;
+              });
+              String result =
+                  await ref.read(customerProvider.notifier).addCustomer();
+              setState(() {
+                isSaving = false;
+              });
+              if (result.isEmpty) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("failed, try again"),
+                  ),
+                );
+                return;
+              }
+
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("failed, try again"),
+                  content: Text("Customer created successfully"),
                 ),
               );
-              return;
-            }
-
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Customer created successfully"),
+              Navigator.pop(context);
+            },
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).primaryColor,
               ),
-            );
-            Navigator.pop(context);
-          },
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(
-              Theme.of(context).primaryColor,
+              foregroundColor: const WidgetStatePropertyAll(Colors.white),
             ),
-            foregroundColor: const WidgetStatePropertyAll(Colors.white),
+            child: isSaving
+                ? const CupertinoActivityIndicator(color: Colors.white)
+                : const Text("Add Customer"),
           ),
-          child: isSaving
-              ? const CupertinoActivityIndicator(color: Colors.white)
-              : const Text("Add Customer"),
         ),
       ),
     );

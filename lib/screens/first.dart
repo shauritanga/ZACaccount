@@ -70,7 +70,7 @@ class FirstLandingScreen extends StatelessWidget {
             minimumSize: const WidgetStatePropertyAll<Size>(Size(200, 44)),
           ),
           child: const Text(
-            "next",
+            "NEXT",
             style: TextStyle(color: Colors.white),
           ),
         ),

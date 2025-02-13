@@ -10,12 +10,12 @@ import 'package:zaccount/models/auth_data.dart';
 import 'package:zaccount/models/company.dart';
 import 'package:zaccount/presentation/providers/company_provider.dart';
 import 'package:zaccount/screens/home.dart';
+import 'package:zaccount/screens/landing.dart';
 import 'package:zaccount/screens/privacy.dart';
 import 'package:zaccount/screens/signup.dart';
 import 'package:zaccount/screens/terms.dart';
 import 'package:zaccount/screens/welcome.dart';
 import 'package:zaccount/utils/alert_user.dart';
-import 'package:zaccount/utils/constants.dart';
 import 'package:zaccount/utils/gmail_sign_in.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -35,26 +35,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const LandingScreen(),
+                      ),
+                      (route) => false);
                 },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  height: 32.h,
-                  width: 32.w,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: lightGrey,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Icon(Icons.chevron_left, color: Colors.blue.shade900),
+                icon: Icon(
+                  Icons.keyboard_arrow_left,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               Align(
@@ -109,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             color: Colors.grey,
                           ),
                           filled: true,
-                          fillColor: lightGrey,
+                          fillColor: Theme.of(context).colorScheme.surface,
                           hintText: "Enter email",
                           hintStyle: const TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
@@ -135,7 +131,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             color: Colors.grey,
                           ),
                           filled: true,
-                          fillColor: lightGrey,
+                          fillColor: Theme.of(context).colorScheme.surface,
                           hintText: "Enter password",
                           hintStyle: const TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
@@ -268,7 +264,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: primary,
+                      color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     alignment: Alignment.center,
@@ -311,9 +307,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             builder: (ctx) => const HomeScreen(),
                           ),
                           (route) => false);
-                    } on FirebaseAuthException catch (e) {
-                      
-                    }
+                    } on FirebaseAuthException {}
                   },
                   child: Container(
                     padding:

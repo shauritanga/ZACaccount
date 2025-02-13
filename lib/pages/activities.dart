@@ -19,12 +19,8 @@ class ActivitiesPage extends ConsumerStatefulWidget {
 }
 
 class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
-  String selectedItem = "All";
-
   List<String> get items =>
-      ['All', 'Invoice', 'Expense', 'Product', 'Customer', 'Vendor'];
-
-  int selectedTabIndex = 0;
+      ['all', 'invoice', 'expense', 'product', 'customer', 'vendor'];
 
   final TextEditingController _searchTextController = TextEditingController();
 
@@ -32,13 +28,14 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
   Widget build(BuildContext context) {
     final asyncValue = ref.watch(activitiyFutureProvider);
     final searchProvider = ref.watch(searchQueryProvider);
+    final filter = ref.watch(filterProvider);
     return Scaffold(
       body: Column(
         children: [
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(bottom: 5),
-            height: 220.h,
+            height: 210.h,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -62,28 +59,20 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                           onTap: () {
                             ref.read(homeProvider.notifier).updateCurrentTab(0);
                           },
-                          child: Container(
-                            width: 50.w,
-                            height: 43.h,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(7.r),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 25.w,
-                                height: 25.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 2, 33, 80)
-                                      .withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.chevron_left,
-                                    color: Colors.white,
-                                    size: 18.r,
-                                  ),
+                          child: Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorDark
+                                    .withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.chevron_left,
+                                  color: Colors.white,
+                                  size: 18.r,
                                 ),
                               ),
                             ),
@@ -101,28 +90,20 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                           onTap: () async {
                             ref.read(homeProvider.notifier).updateCurrentTab(3);
                           },
-                          child: Container(
-                            width: 50.w,
-                            height: 43.h,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 25.w,
-                                height: 25.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 2, 33, 80)
-                                      .withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    CupertinoIcons.settings,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
+                          child: Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorDark
+                                    .withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  CupertinoIcons.settings,
+                                  color: Colors.white,
+                                  size: 18.r,
                                 ),
                               ),
                             ),
@@ -135,6 +116,7 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: CustomSearchBox(
+                      searchTitle: "Search activity...",
                       controller: _searchTextController,
                       deviceWidth: MediaQuery.sizeOf(context).width,
                       onChanged: (text) {
@@ -154,27 +136,23 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                         final item = items[index];
                         return GestureDetector(
                           onTap: () {
-                            setState(() {
-                              selectedTabIndex = index;
-                              selectedItem =
-                                  items[index] == "All" ? "" : items[index];
-                            });
+                            ref.read(filterProvider.notifier).state = item;
                           },
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             margin: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
-                              color: selectedTabIndex == index
+                              color: items.indexOf(filter) == index
                                   ? Colors.white
                                   : Colors.white.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Center(
                               child: Text(
-                                item,
+                                "${item.substring(0, 1).toUpperCase()}${item.substring(1)}",
                                 style: GoogleFonts.roboto(
-                                  color: selectedTabIndex == index
+                                  color: items.indexOf(filter) == index
                                       ? Colors.black
                                       : Colors.white,
                                 ),
@@ -199,7 +177,7 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.surface,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.shade900,
@@ -215,17 +193,7 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                     ),
                   );
                 }
-
-                final activities = data
-                    .where((activity) =>
-                        activity.name
-                            .toLowerCase()
-                            .contains(searchProvider.toLowerCase()) &&
-                        activity.type
-                            .toLowerCase()
-                            .contains(selectedItem.toLowerCase()))
-                    .toList();
-
+                final activities = data;
                 if (activities.isEmpty) {
                   return Container(
                     width: double.infinity,
@@ -233,7 +201,7 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Text(
@@ -243,11 +211,10 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                   );
                 }
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16.w),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListView.builder(
@@ -256,74 +223,87 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
                     itemCount: activities.length,
                     itemBuilder: (context, index) {
                       final activity = activities[index];
-                      return Column(
-                        children: [
-                          CustomListItem(
-                            dateCreated: activity.dateCreated,
-                            icon: activity.icon,
-                            color: activity.type.toLowerCase() == "product"
-                                ? Theme.of(context).colorScheme.secondary
-                                : activity.type.toLowerCase() == "customer"
-                                    ? Colors.purple
-                                    : Colors.black,
-                            title: activity.name,
-                            status: activity.status,
-                            amount: activity.amount,
-                            statusColor: activity.type.toLowerCase() ==
-                                        "product" ||
-                                    activity.type.toLowerCase() == "customer"
-                                ? Colors.purple
-                                : activity.type.toLowerCase() == "invoice"
-                                    ? Colors.blue
-                                    : Colors.black,
-                            onTap: () {
-                              if (activity.type == "product") {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => const ProductDetails(),
-                                  ),
-                                );
-                                return;
-                              }
-
-                              if (activity.type == "customer") {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => CustomerDetailsScreen(
-                                        customerId: activity.id),
-                                  ),
-                                );
-                                return;
-                              }
-
-                              if (activity.type == "vendor") {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => CustomerDetailsScreen(
-                                        customerId: activity.id),
-                                  ),
-                                );
-                                return;
-                              }
-
-                              if (activity.type == "invoice") {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => InvoiceDetails(
-                                      invoiceId: activity.id,
+                      return Container(
+                        padding: const EdgeInsets.all(5.0),
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            CustomListItem(
+                              dateCreated: activity.dateCreated,
+                              icon: activity.icon,
+                              color: activity.type.toLowerCase() == "product"
+                                  ? Theme.of(context).primaryColor
+                                  : activity.type.toLowerCase() == "customer"
+                                      ? Colors.purple
+                                      : activity.type.toLowerCase() == "vendor"
+                                          ? Colors.purple
+                                          : activity.type.toLowerCase() ==
+                                                  "invoice"
+                                              ? Colors.green
+                                              : Colors.pink,
+                              title: activity.name,
+                              status: activity.status,
+                              amount: activity.amount,
+                              statusColor: activity.type.toLowerCase() ==
+                                          "product" ||
+                                      activity.type.toLowerCase() == "customer"
+                                  ? Colors.purple
+                                  : activity.type.toLowerCase() == "invoice"
+                                      ? Colors.blue
+                                      : Colors.black,
+                              onTap: () {
+                                if (activity.type == "product") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (ctx) => const ProductDetails(),
                                     ),
-                                  ),
-                                );
-                                return;
-                              }
-                            },
-                          ),
-                          const Divider(),
-                        ],
+                                  );
+                                  return;
+                                }
+
+                                if (activity.type == "customer") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (ctx) => CustomerDetailsScreen(
+                                          customerId: activity.id),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                if (activity.type == "vendor") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (ctx) => CustomerDetailsScreen(
+                                          customerId: activity.id),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                if (activity.type == "invoice") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (ctx) => InvoiceDetails(
+                                        invoiceId: activity.id,
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+                              },
+                            ),
+                            const Divider(),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -331,7 +311,7 @@ class _ActivitiesPageState extends ConsumerState<ActivitiesPage> {
               },
               error: (error, stackTrace) => Center(
                 child: Text(
-                  error.toString(),
+                  stackTrace.toString(),
                 ),
               ),
               loading: () => const CupertinoActivityIndicator(),

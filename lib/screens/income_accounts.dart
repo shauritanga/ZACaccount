@@ -17,9 +17,6 @@ class IncomeAccountsScreen extends ConsumerStatefulWidget {
 }
 
 class _IncomeAccountsScreenState extends ConsumerState<IncomeAccountsScreen> {
-  List<String> get menu => ['All', 'New', 'Name', 'Description', 'Archieved'];
-  int selectedTabIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final asyncValue = ref.watch(incomeAccountStreamProvider);
@@ -27,8 +24,9 @@ class _IncomeAccountsScreenState extends ConsumerState<IncomeAccountsScreen> {
       body: Column(
         children: [
           Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             width: double.infinity,
-            height: 250.h,
+            height: 200,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -37,145 +35,74 @@ class _IncomeAccountsScreenState extends ConsumerState<IncomeAccountsScreen> {
                 ],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
+                stops: const [0.0, 0.7],
               ),
             ),
             child: SafeArea(
               bottom: false,
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: 50.w,
-                            height: 43.h,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(7.r),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 25.w,
-                                height: 25.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 2, 33, 80)
-                                      .withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.chevron_left,
-                                    color: Colors.white,
-                                    size: 18.r,
-                                  ),
-                                ),
-                              ),
-                            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .primaryColorDark
+                                .withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(50.r),
                           ),
+                          child: const Center(
+                              child: Icon(
+                            CupertinoIcons.chevron_left,
+                            size: 18,
+                          )),
                         ),
-                        Text(
-                          "Income Accounts",
-                          style: GoogleFonts.roboto(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      ),
+                      Text(
+                        "Income accounts",
+                        style: GoogleFonts.roboto(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (ctx) =>
-                                    const AddIncomeAccountScreen(),
-                              ),
-                            );
-                            //whatever you're returning, does not have to be a Container
-                          },
-                          child: Container(
-                            width: 50.w,
-                            height: 43.h,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(7),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              fullscreenDialog: true,
+                              builder: (ctx) => const AddIncomeAccountScreen(),
                             ),
-                            child: Center(
-                              child: Container(
-                                width: 25.w,
-                                height: 25.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 2, 33, 80)
-                                      .withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .primaryColorDark
+                                .withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(50.r),
                           ),
+                          child: const Center(
+                              child: Icon(
+                            CupertinoIcons.add,
+                            size: 18,
+                          )),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 22.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: CustomSearchBox(
-                      deviceWidth: MediaQuery.sizeOf(context).width,
-                    ),
-                  ),
-                  SizedBox(height: 22.h),
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                    height: 30.h,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: menu.length,
-                      itemBuilder: (context, index) {
-                        final item = menu[index];
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedTabIndex = index;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            padding: EdgeInsets.symmetric(horizontal: 16.w),
-                            margin: EdgeInsets.symmetric(horizontal: 12.w),
-                            decoration: BoxDecoration(
-                              color: selectedTabIndex == index
-                                  ? Colors.white
-                                  : Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Center(
-                              child: Text(
-                                item,
-                                style: GoogleFonts.roboto(
-                                  color: selectedTabIndex == index
-                                      ? Colors.black
-                                      : Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
+                  const SizedBox(height: 24),
+                  CustomSearchBox(
+                      searchTitle: "Search...",
+                      deviceWidth: MediaQuery.sizeOf(context).width),
                 ],
               ),
             ),
@@ -190,13 +117,6 @@ class _IncomeAccountsScreenState extends ConsumerState<IncomeAccountsScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade900,
-                        offset: const Offset(0, 1),
-                        blurRadius: 1.0,
-                      )
-                    ],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Text(
@@ -210,14 +130,7 @@ class _IncomeAccountsScreenState extends ConsumerState<IncomeAccountsScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.13),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade900,
-                      offset: const Offset(0, 1),
-                      blurRadius: 1.0,
-                    )
-                  ],
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListView.builder(

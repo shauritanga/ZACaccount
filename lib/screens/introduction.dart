@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:zaccount/screens/business_type.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class IntroductionScreen extends StatelessWidget {
   const IntroductionScreen({super.key});
@@ -15,7 +14,10 @@ class IntroductionScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: Padding(
@@ -43,7 +45,9 @@ class IntroductionScreen extends StatelessWidget {
                   );
                 },
                 style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                    backgroundColor: WidgetStatePropertyAll<Color>(
+                      Theme.of(context).primaryColor,
+                    ),
                     shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

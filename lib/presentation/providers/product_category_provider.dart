@@ -1,41 +1,57 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zaccount/models/product_category.dart';
 
-final asyncProductCategoryProvider =
-    AsyncNotifierProvider<AsyncProductCategoryNotifier, List<ProductCategory>>(
-        () {
-  return AsyncProductCategoryNotifier();
+final productCategoryStreamProvider =
+    StreamProvider<List<ProductCategory>>((ref) {
+  return FirebaseFirestore.instance
+      .collection('product-categories')
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs
+            .map((doc) => ProductCategory.fromDocument(doc))
+            .toList(),
+      );
 });
 
-class AsyncProductCategoryNotifier
-    extends AsyncNotifier<List<ProductCategory>> {
+final productCategoryProvider =
+    StateNotifierProvider<ProductCategoryNotifier, ProductCategory>((ref) {
+  return ProductCategoryNotifier();
+});
+
+class ProductCategoryNotifier extends StateNotifier<ProductCategory> {
+  ProductCategoryNotifier() : super(ProductCategory());
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future<List<ProductCategory>> _fetchProducCategories() async {
-    QuerySnapshot snapshot =
-        await _firestore.collection("product-categories").get();
-    List<ProductCategory> productCategories =
-        snapshot.docs.map((doc) => ProductCategory.fromDocument(doc)).toList();
-    return productCategories;
+  Future<String> addProductCategory({
+    required String name,
+    required String description,
+    required String image,
+  }) async {
+    DocumentReference reference = await _firestore
+        .collection("product-categories")
+        .add(state
+            .copyWith(name: name, description: description, image: image)
+            .toJson());
+
+    return reference.id;
   }
 
-  @override
-  FutureOr<List<ProductCategory>> build() {
-    return _fetchProducCategories();
-  }
+  Future<void> updateImage(File image) async {
+    Reference storageRef =
+        _storage.ref().child("product-categories").child(state.id);
+    TaskSnapshot snapshot = await storageRef.putFile(image);
+    String profilePicUrl = await snapshot.ref.getDownloadURL();
+    await _firestore
+        .collection("product-categories")
+        .doc(state.id)
+        .update(({'image': profilePicUrl}));
 
-  Future<void> addProductCategory(ProductCategory productCategory) async {
-    // Set the state to loading
-    state = const AsyncValue.loading();
-    // Add the new todo and reload the todo list from the remote repository
-    state = await AsyncValue.guard(() async {
-      await _firestore
-          .collection("product-categories")
-          .add(productCategory.toJson());
-      return _fetchProducCategories();
-    });
+    state = state.copyWith(image: profilePicUrl);
   }
 }

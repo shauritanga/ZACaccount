@@ -146,6 +146,7 @@ class _ExpenseAccountsScreenState extends ConsumerState<ExpenseAccountsScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: CustomSearchBox(
+                      searchTitle: "Search...",
                       deviceWidth: MediaQuery.sizeOf(context).width,
                     ),
                   ),

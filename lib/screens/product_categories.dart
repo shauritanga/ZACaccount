@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zaccount/presentation/providers/product_category_provider.dart';
+import 'package:zaccount/presentation/providers/product_provider.dart';
 import 'package:zaccount/screens/add_product_category.dart';
 import 'package:zaccount/shared/widgets/custom_search_box.dart';
 
@@ -12,7 +13,7 @@ class ProductCategoriesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncValue = ref.watch(asyncProductCategoryProvider);
+    final asyncValue = ref.watch(productCategoryStreamProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -94,6 +95,7 @@ class ProductCategoriesScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
                   CustomSearchBox(
+                      searchTitle: "Search...",
                       deviceWidth: MediaQuery.sizeOf(context).width),
                 ],
               ),
@@ -128,11 +130,20 @@ class ProductCategoriesScreen extends ConsumerWidget {
                   itemCount: data.length,
                   itemBuilder: (context, index) {
                     final category = data[index];
-                    return Text(
-                      category.name,
-                      style: const TextStyle(
-                        color: Colors.white,
+                    return ListTile(
+                      title: Text(
+                        category.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
+                      subtitle: Text(category.description),
+                      onTap: () {
+                        ref
+                            .read(productProvider.notifier)
+                            .updateProductCategory(category: category);
+                        Navigator.pop(context);
+                      },
                     );
                   },
                 ),

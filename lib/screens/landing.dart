@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zaccount/screens/first.dart';
 import 'package:zaccount/screens/login.dart';
-import 'package:zaccount/utils/constants.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -75,22 +74,13 @@ class _LandingScreenState extends State<LandingScreen>
                     Positioned(
                       top: kToolbarHeight,
                       left: 0,
-                      child: InkWell(
-                        onTap: () {
+                      child: IconButton(
+                        onPressed: () {
                           _updateCurrentPageIndex(0);
                         },
-                        child: Container(
-                          height: 32.h,
-                          width: 32.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: lightGrey,
-                            borderRadius: BorderRadius.circular(5.r),
-                          ),
-                          child: Icon(
-                            Icons.chevron_left,
-                            color: Colors.blue.shade900,
-                          ),
+                        icon: Icon(
+                          Icons.keyboard_arrow_left,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -100,7 +90,7 @@ class _LandingScreenState extends State<LandingScreen>
                 Text(
                   "Simplify",
                   style: TextStyle(
-                    color: primary,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -108,7 +98,7 @@ class _LandingScreenState extends State<LandingScreen>
                 Text(
                   "Your finances",
                   style: TextStyle(
-                    color: primary,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -158,12 +148,13 @@ class _LandingScreenState extends State<LandingScreen>
                       );
                     },
                     style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll<Color>(primary),
+                      backgroundColor: WidgetStatePropertyAll<Color>(
+                          Theme.of(context).primaryColor),
                       minimumSize:
                           WidgetStatePropertyAll<Size>(Size(200.w, 50.h)),
                     ),
                     child: const Text(
-                      "next",
+                      "NEXT",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

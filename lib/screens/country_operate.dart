@@ -91,7 +91,10 @@ class _CountryPageState extends ConsumerState<CountryPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+          icon: Icon(
+            HugeIcons.strokeRoundedArrowLeft01,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: Padding(
@@ -133,14 +136,22 @@ class _CountryPageState extends ConsumerState<CountryPage> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     textColor: _filteredItems[index]['name'] == _selectedItem
-                        ? primary
+                        ? Theme.of(context).primaryColor
                         : Colors.black,
                     contentPadding: EdgeInsets.zero,
                     leading: Text(_filteredItems[index]['flag']),
-                    title: Text(_filteredItems[index]['name']),
+                    title: Text(
+                      _filteredItems[index]['name'],
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                     trailing: _isSelected &&
                             _filteredItems[index]['name'] == _selectedItem
-                        ? Icon(HugeIcons.strokeRoundedTick02, color: primary)
+                        ? Icon(
+                            HugeIcons.strokeRoundedTick02,
+                            color: Theme.of(context).primaryColor,
+                          )
                         : null,
                     onTap: () {
                       // Update the search field with the selected item
@@ -165,10 +176,8 @@ class _CountryPageState extends ConsumerState<CountryPage> {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        margin: const EdgeInsets.symmetric(vertical: 24),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            color: lightGrey, borderRadius: BorderRadius.circular(8)),
         child: TextButton(
           onPressed: () async {
             ref.read(companyProvider.notifier).updateCountry(_selectedItem);
@@ -181,7 +190,10 @@ class _CountryPageState extends ConsumerState<CountryPage> {
           },
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll<Color>(
-                _selectedItem.isEmpty ? Colors.grey.shade400 : primary),
+              _selectedItem.isEmpty
+                  ? Colors.grey.shade400
+                  : Theme.of(context).primaryColor,
+            ),
             foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
             minimumSize: const WidgetStatePropertyAll<Size>(
               Size(double.infinity, 48),
